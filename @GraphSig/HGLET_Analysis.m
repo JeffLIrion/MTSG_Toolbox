@@ -5,10 +5,10 @@ function [dmatrix,GP] = HGLET_Analysis(G,GP,~,~)
 % Input
 %   G               a GraphSig object
 %   GP              a GraphPart object
-%   ~               if a 3rd input is given, use the eigevectors of L_rw as
+%   ~               if 3 inputs are given, use the eigevectors of L_rw as
 %                   the bases  ==>  U_rw = D^(0.5) * U_sym
-%   ~               if a 4th input is given, use the eigenvectors of L_sym
-%                   as the bases  ==>  U_sym = D^(-0.5) * U_rw
+%   ~               if 4 inputs are given, use the eigenvectors of L_sym as
+%                   the bases  ==>  U_sym = D^(-0.5) * U_rw
 %
 % Output
 %   dmatrix         the matrix of expansion coefficients

@@ -8,10 +8,10 @@ function [f,GS] = HGLET_Synthesis(dvec,GP,BS,G,~,~)
 %   GP          a GraphPart object
 %   BS          a BasisSpec object
 %   G           a GraphSig object
-%   ~           if a 5th input is given, use the eigenvectors of L_rw as
-%               the bases  ==>  U_rw = D^(0.5) * U_sym
-%   ~           if a 6th input is given, use the eigenvectors of L_sym as
-%               the bases  ==>  U_sym = D^(-0.5) * U_rw
+%   ~           if 5 inputs are given, use the eigenvectors of L_rw as the
+%               bases  ==>  U_rw = D^(0.5) * U_sym
+%   ~           if 6 inputs are given, use the eigenvectors of L_sym as the
+%               bases  ==>  U_sym = D^(-0.5) * U_rw
 %
 % Output
 %   f           the reconstructed signal

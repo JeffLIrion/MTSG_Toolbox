@@ -6,9 +6,9 @@ function Gout = HGLET_BasisVector(G,GP,drow,dcol,~,~)
 %   GP      a GraphPart object
 %   drow    the row with a "1" entry
 %   dcol    the column with a "1" entry
-%   ~       if a 5th input is given, use the eigenvectors of L_rw as the
+%   ~       if 5 inputs are given, use the eigenvectors of L_rw as the
 %           bases
-%   ~       if a 6th input is given, use the eigenvectors of L_sym as the
+%   ~       if 6 inputs are given, use the eigenvectors of L_sym as the
 %           bases
 %
 % Outputs
