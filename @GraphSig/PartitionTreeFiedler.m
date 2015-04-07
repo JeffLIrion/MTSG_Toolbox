@@ -28,9 +28,8 @@ jmax = max(3*floor(log2(N)),4);
 
 % the way in which the nodes are indexed on each level
 sslac = ind_class(N);
-ind = zeros(N,jmax,sslac);
-    
-ind(:,1) = (1:N)';
+ind = zeros(N,1,sslac);
+ind = (1:N)';
 
 % stands for regionstarts, meaning that the index in 'ind' of the first
 % point in region number i is rs(i)
@@ -57,35 +56,42 @@ if nargin == 1
             jmax = jmax+1;
         end
         
+        % for tracking the child regions
+        rr = 1;
+        
+        % cycle through the parent regions
         for r = 1:regioncount
+            % the start of the parent region and 1 node after the end of
+            % the parent region
+            rs1 = rs(r,j);
+            rs2 = rs(r+1,j);
+            
+            % the number of nodes in the parent region
+            n = rs2-rs1;
+            
             % regions with 2 or more nodes
-            if rs(r,j) ~= rs(r+1,j)-1
-                rs1 = rs(r,j);
-                rs2 = rs(r+1,j)-1;
-                indrs = ind(rs(r,j):rs(r+1,j)-1,j);
+            if n > 1
+                indrs = ind(rs1:rs2-1);
 
                 % partition the current region
                 pm = PartitionFiedler(G.W(indrs,indrs));
-                r1 = sum(pm > 0);% # points in subregion 1
-                r2 = sum(pm < 0);% # points in subregion 2
-
+                
+                % determine the number of points in child region 1
+                n1 = sum(pm > 0);
+                
                 % update the indexing
-                indr  = zeros(r1+r2,1);
-                indr(1:r1)       = indrs(pm > 0);
-                indr(r1+1:r1+r2) = indrs(pm < 0);
-                ind(rs1:rs2,j+1) = indr;
-                clear indr
+                ind(rs1:rs1+n1-1) = indrs(pm > 0);
+                ind(rs1+n1:rs2-1) = indrs(pm < 0);
 
                 % update the region tracking
-                rr = nnz(rs(:,j+1));
-                rs(rr+1,j+1) = rs1+r1;
-                rs(rr+2,j+1) = rs2+1;
+                rs(rr+1,j+1) = rs1+n1;
+                rs(rr+2,j+1) = rs2;
+                rr = rr+2;
                 
             % regions with 1 node
-            else
-                rr = nnz(rs(:,j+1));
-                rs(rr+1,j+1) = rs(r+1,j);
-                ind(rs(rr,j+1),j+1) = ind(rs(r,j),j);                    
+            elseif n == 1
+                rs(rr+1,j+1) = rs2;
+                rr = rr+1;
             end
         end
 
@@ -105,48 +111,52 @@ elseif nargin > 1
             jmax = jmax+1;
         end
         
+        % for tracking the child regions
+        rr = 1;
+        
+        % cycle through the parent regions
         for r = 1:regioncount
+            % the start of the parent region and 1 node after the end of
+            % the parent region
+            rs1 = rs(r,j);
+            rs2 = rs(r+1,j);
+            
+            % the number of nodes in the parent region
+            n = rs2-rs1;
+            
             % regions with 2 or more nodes
-            if rs(r,j) ~= rs(r+1,j)-1
-                rs1 = rs(r,j);
-                rs2 = rs(r+1,j)-1;
-                indrs = ind(rs(r,j):rs(r+1,j)-1,j);
+            if n > 1
+                indrs = ind(rs1:rs2-1);
 
                 % partition the current region
                 pm = PartitionFiedler(G.W(indrs,indrs),1);
-                r1 = sum(pm > 0);% # points in subregion 1
-                r2 = sum(pm < 0);% # points in subregion 2
                 
+                % determine the number of points in child region 1
+                n1 = sum(pm > 0);
+
                 % update the indexing
-                indr  = zeros(r1+r2,1);
-                indr(1:r1)       = indrs(pm > 0);
-                indr(r1+1:r1+r2) = indrs(pm < 0);
-                ind(rs1:rs2,j+1) = indr;
-                clear indr
+                ind(rs1:rs1+n1-1) = indrs(pm > 0);
+                ind(rs1+n1:rs2-1) = indrs(pm < 0);
 
                 % update the region tracking
-                rr = nnz(rs(:,j+1));
-                rs(rr+1,j+1) = rs1+r1;
-                rs(rr+2,j+1) = rs2+1;
+                rs(rr+1,j+1) = rs1+n1;
+                rs(rr+2,j+1) = rs2;
+                rr = rr+2;
                 
             % regions with 1 node
-            else
-                rr = nnz(rs(:,j+1));
-                rs(rr+1,j+1) = rs(r+1,j);
-                ind(rs(rr,j+1),j+1) = ind(rs(r,j),j);                    
+            elseif n == 1
+                rs(rr+1,j+1) = rs2;
+                rr = rr+1;
             end
         end
 
         j = j+1;
-    end    
+    end
 end
 
 
 % get rid of excess columns in rs
 rs(:,j:end) = [];
-
-% get rid of all but the last column of ind
-ind = ind(:,j-1);
 
 % create a GraphPart object
 if nargin == 1

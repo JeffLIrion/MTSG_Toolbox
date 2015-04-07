@@ -27,6 +27,13 @@ if isnumeric(flatten)
     
 % elseif strcmpi(flatten,'histogram')
     
+    
+elseif strcmpi(flatten,'std')
+    dmatrix = std(dmatrix,0,3);
+    
+elseif strcmpi(flatten,'var')
+    dmatrix = var(dmatrix,0,3);
+    
 else
     dmatrix = sum(abs(dmatrix),3);
 end
