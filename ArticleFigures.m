@@ -1,6 +1,11 @@
 % ArticleFigures
 % Generate selected figures from "Hierarchical Graph Laplacian Eigen
 % Transforms" and "The Generalized Haar-Walsh Transform"
+% 
+% 1. J. Irion and N. Saito, "Hierarchical graph Laplacian eigen
+% transforms," Japan SIAM Letters, vol. 6, pp. 21-24, 2014.
+% 2. J. Irion and N. Saito, "The generalized Haar-Walsh transform," Proc. 
+% 2014 IEEE Statistical Signal Processing Workshop, pp. 488-491, 2014.
 %
 %
 %
