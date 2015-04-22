@@ -37,9 +37,8 @@ H1c = HGLET_BasisVector(G,GP,rs(6,4)+2,4,1);
 % Fig 1d
 H1d = HGLET_BasisVector(G,GP,rs(6,4)+9,4,1);
 
-% NOTE: Due to updates in the code since that paper was published, the
-% signs of the figures generated herein for Figs. 1c and 1d are opposite of
-% those in the article.  
+% NOTE: Due to updates in the code, the signs of the basis functions 
+% generated herein may differ from those in the article.  
 
 
 
@@ -54,10 +53,18 @@ G1a = GHWT_BasisVector(G,GP,2,1);
 G1b = GHWT_BasisVector(G,GP,8,1);
 
 % Fig 1c
-G1c = GHWT_BasisVector(G,GP,3,3);
+G1c = GHWT_BasisVector(G,GP,4,3);
 
 % Fig 1d
 G1d = GHWT_BasisVector(G,GP,rs(8,4)+3,4);
+
+% NOTE: Due to updates in the code, the basis functions generated herein
+% may differ from those in the article.  In particular, due to changes in
+% the recursive partitioning code, 
+% 1) the signs are flipped in the Northeast corner of Fig. 1b
+% 2) Fig. 1c now corresponds to psi(j=2,k=0,l=3) instead of 
+%    psi(j=2,k=0,l=2)
+
 
 
 %%% FIGURE 4
@@ -96,6 +103,8 @@ G4d = EditPlotSpecs(G4d,sprintf('notitle CLim[%f,%f]',cmin,cmax));
 % NOTE: These figures and results will differ from those in the article
 % because the noise is generated randomly and thus not the same as in the
 % experiment that produced the article figures.  
+
+
 
 % clear unnecessary variables
 clear rs dmatrix dvec dvecT kept cmin cmax

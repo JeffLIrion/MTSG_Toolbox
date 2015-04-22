@@ -79,6 +79,15 @@ if nargin == 1
                 % determine the number of points in child region 1
                 n1 = sum(pm > 0);
                 
+                % switch regions 1 and 2, if necessary, based on the sum of
+                % edge weights to the previous child region (i.e. cousin)
+                if r > 1
+                    if sum(sum(G.W(ind(rs0:rs1-1),indrs(pm > 0)))) < sum(sum(G.W(ind(rs0:rs1-1),indrs(pm < 0))))
+                        pm = -pm;
+                        n1 = n-n1;
+                    end
+                end
+                
                 % update the indexing
                 ind(rs1:rs1+n1-1) = indrs(pm > 0);
                 ind(rs1+n1:rs2-1) = indrs(pm < 0);
@@ -87,11 +96,13 @@ if nargin == 1
                 rs(rr+1,j+1) = rs1+n1;
                 rs(rr+2,j+1) = rs2;
                 rr = rr+2;
+                rs0 = rs1+n1;
                 
             % regions with 1 node
             elseif n == 1
                 rs(rr+1,j+1) = rs2;
                 rr = rr+1;
+                rs0 = rs1;
             end
         end
 
@@ -134,6 +145,15 @@ elseif nargin > 1
                 % determine the number of points in child region 1
                 n1 = sum(pm > 0);
 
+                % switch regions 1 and 2, if necessary, based on the sum of
+                % edge weights to the previous region
+                if r > 1
+                    if sum(sum(G.W(ind(rs0:rs1-1),indrs(pm > 0)))) < sum(sum(G.W(ind(rs0:rs1-1),indrs(pm < 0))))
+                        pm = -pm;
+                        n1 = n-n1;
+                    end
+                end
+                
                 % update the indexing
                 ind(rs1:rs1+n1-1) = indrs(pm > 0);
                 ind(rs1+n1:rs2-1) = indrs(pm < 0);
@@ -142,11 +162,13 @@ elseif nargin > 1
                 rs(rr+1,j+1) = rs1+n1;
                 rs(rr+2,j+1) = rs2;
                 rr = rr+2;
+                rs0 = rs1+n1;
                 
             % regions with 1 node
             elseif n == 1
                 rs(rr+1,j+1) = rs2;
                 rr = rr+1;
+                rs0 = rs1;
             end
         end
 
