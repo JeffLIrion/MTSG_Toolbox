@@ -24,7 +24,7 @@ elseif ~isa(G1,'GraphSig')
     G.f = G.f + G1;
 else
     G = G1;
-    G.f = G1.f+G2.f;
+    G.f = G1.f + G2.f;
 end
 
 

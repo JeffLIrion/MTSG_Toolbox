@@ -16,7 +16,16 @@ function G = minus(G1,G2)
 
 
 
-G = G1;
-G.f = G1.f-G2.f;
+if ~isa(G2,'GraphSig')
+    G = G1;
+    G.f = G.f - G2;
+elseif ~isa(G1,'GraphSig')
+    G = G2;
+    G.f = G1 - G.f;
+else
+    G = G1;
+    G.f = G1.f - G2.f;
+end
+
 
 end
