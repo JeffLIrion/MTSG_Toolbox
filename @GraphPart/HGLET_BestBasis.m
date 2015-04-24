@@ -26,25 +26,10 @@ function [dvec,BS,dmatrix,cmap] = HGLET_BestBasis(dmatrix,GP,costfun,flatten)
 
 
 % the cost functional to be used
-useMDL = false;
 if ~exist('costfun','var')
-    costfun = @(x) norm(x,0.1);
-elseif isnumeric(costfun)
-    costfun = @(x) norm(x,costfun);
-elseif ischar(costfun) && strcmpi(costfun,'MDL')
-    useMDL = true;
-elseif ~isa(costfun,'function_handle')
-    costfun = @(x) norm(x,0.1);
+    costfun = [];
 end
-
-% the cost functional to be used
-if ~exist('costfun','var')
-    costfun = @(x) norm(x,0.1);
-elseif isnumeric(costfun)
-    costfun = @(x) norm(x,costfun);
-elseif ~isa(costfun,'function_handle')
-    costfun = @(x) norm(x,0.1);
-end
+[costfun,useMDL] = cost_functional(costfun);
 
 % constants and dmatrix cleanup
 [N,jmax,fcols] = size(dmatrix);
