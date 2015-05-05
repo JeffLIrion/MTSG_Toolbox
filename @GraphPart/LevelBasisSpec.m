@@ -18,9 +18,6 @@ function BS = LevelBasisSpec(GP,j,~)
 
 
 
-% determine jmax
-[~,jmax] = size(GP.rs);
-
 % coarse-to-fine dictionary
 if nargin == 2
     Nj = nnz(GP.rs(:,j+1))-1;
@@ -29,7 +26,10 @@ if nargin == 2
     
 % fine-to-coarse dictionary
 elseif nargin == 3
-    Nj = nnz(GP.rs(:,jmax+1-j))-1;
+    if isempty(GP.rsf2c)
+        GP = GHWT_Info(GP);
+    end
+    Nj = nnz(GP.rsf2c(:,j+1))-1;
     levlist = (j+1)*ones(Nj,1,'uint8');
     BS = BasisSpec(levlist,[],false,sprintf('fine-to-coarse level %d',j));
 end

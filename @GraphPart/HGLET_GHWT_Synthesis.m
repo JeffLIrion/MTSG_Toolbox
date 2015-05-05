@@ -14,7 +14,7 @@ function [f,GS] = HGLET_GHWT_Synthesis(dvec,GP,BS,trans,G)
 %                   01 = HGLET with Lrw
 %                   10 = HGLET with Lsym
 %                   11 = GHWT
-%   G           a GraphSig object (optional)
+%   G           a GraphSig object
 %
 % Output
 %   f           the reconstructed signal
