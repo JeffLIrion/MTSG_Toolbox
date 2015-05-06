@@ -83,7 +83,7 @@ dmatrix = GHWT_Analysis(GN,GP);
 % find the GHWT best basis
 [dvec,BS] = GHWT_BestBasis(dmatrix,GP,0.1);
 
-% threshold the HGLET coefficients
+% threshold the GHWT coefficients
 [dvecT,kept] = dvec_Threshold(dvec,'s',0.11,GP,BS);
 
 % reconstruct
