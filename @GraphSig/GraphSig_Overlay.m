@@ -78,17 +78,19 @@ if ~isscalar(ptsize)
 end
 
 % plot the nodes
-if G1.dim == 2
-    if ischar(marker)
-        scatter(G1.xy(:,1), G1.xy(:,2), ptsize, marker, 'filled');
+if ptsize(1) ~= 0
+    if G1.dim == 2
+        if ischar(marker)
+            scatter(G1.xy(:,1), G1.xy(:,2), ptsize, marker, 'filled');
+        else
+            scatter(G1.xy(:,1), G1.xy(:,2), ptsize, G1.f, 'filled');
+        end
     else
-        scatter(G1.xy(:,1), G1.xy(:,2), ptsize, G1.f, 'filled');
-    end
-else
-    if ischar(marker)
-        scatter3(G1.xy(:,1), G1.xy(:,2), G1.xy(:,3), ptsize, marker, 'filled');
-    else
-        scatter3(G1.xy(:,1), G1.xy(:,2), G1.xy(:,3), ptsize, G1.f, 'filled');
+        if ischar(marker)
+            scatter3(G1.xy(:,1), G1.xy(:,2), G1.xy(:,3), ptsize, marker, 'filled');
+        else
+            scatter3(G1.xy(:,1), G1.xy(:,2), G1.xy(:,3), ptsize, G1.f, 'filled');
+        end
     end
 end
 
