@@ -46,16 +46,16 @@ end
 [costfun,useMDL] = cost_functional(costfun);
 
 % constants and dmatrix cleanup
-if ~isscalar(dmatrixHsym)
+if isarray(dmatrixHsym)
     [N,jmax,fcols] = size(dmatrixHsym);
     dmatrixHsym( abs(dmatrixHsym) < 10^2*eps ) = 0;
-elseif ~isscalar(dmatrixG)
+elseif isarray(dmatrixG)
     [N,jmax,fcols] = size(dmatrixG);
     dmatrixG( abs(dmatrixG) < 10^2*eps ) = 0;
-elseif ~isscalar(dmatrixHrw)
+elseif isarray(dmatrixHrw)
     [N,jmax,fcols] = size(dmatrixHrw);
     dmatrixHrw( abs(dmatrixHrw) < 10^2*eps ) = 0;
-elseif ~isscalar(dmatrixH)
+elseif isarray(dmatrixH)
     [N,jmax,fcols] = size(dmatrixH);
     dmatrixH( abs(dmatrixH) < 10^2*eps ) = 0;
 else
@@ -68,19 +68,19 @@ if fcols > 1
     if ~exist('flatten','var')
         flatten = 1;
     end
-    if ~isscalar(dmatrixHsym)
+    if isarray(dmatrixHsym)
         dmatrix0Hsym = dmatrixHsym;
         dmatrixHsym = dmatrix_flatten(dmatrixHsym,flatten);
     end
-    if ~isscalar(dmatrixG)
+    if isarray(dmatrixG)
         dmatrix0G = dmatrixG;
         dmatrixG = dmatrix_flatten(dmatrixG,flatten);
     end
-    if ~isscalar(dmatrixHrw)
+    if isarray(dmatrixHrw)
         dmatrix0Hrw = dmatrixHrw;
         dmatrixHrw = dmatrix_flatten(dmatrixHrw,flatten);
     end
-    if ~isscalar(dmatrixH)
+    if isarray(dmatrixH)
         dmatrix0H = dmatrixH;
         dmatrixH = dmatrix_flatten(dmatrixH,flatten);
     end
@@ -89,8 +89,8 @@ end
 % MDL stuff
 if useMDL
     % compute the number of bits needed to store trans entries
-    trans_cost = ceil(log2( ~isscalar(dmatrixHsym) + ~isscalar(dmatrixG) ...
-        + ~isscalar(dmatrixHrw) + ~isscalar(dmatrixH)));
+    trans_cost = ceil(log2( isarray(dmatrixHsym) + isarray(dmatrixG) ...
+        + isarray(dmatrixHrw) + isarray(dmatrixH)));
     
     % compute the number of bits needed to store levlist entries
     levlist_cost = 0*ceil(log2(jmax));
@@ -106,19 +106,19 @@ if useMDL
     costfun = @(x) MDL(x,kmin,kmax,levlist_cost,levlens_cost,trans_cost);
     
     % normalize the coefficients
-    if ~isscalar(dmatrixHsym)
+    if isarray(dmatrixHsym)
         dnorm = norm(dmatrixHsym(:,end),2)/sqrt(N);
         dmatrixHsym = dmatrixHsym/dnorm;
     end
-    if ~isscalar(dmatrixG)
+    if isarray(dmatrixG)
         dnorm = norm(dmatrixG(:,end),2)/sqrt(N);
         dmatrixG = dmatrixG/dnorm;
     end
-    if ~isscalar(dmatrixHrw)
+    if isarray(dmatrixHrw)
         dnorm = norm(dmatrixHrw(:,end),2)/sqrt(N);
         dmatrixHrw = dmatrixHrw/dnorm;
     end
-    if ~isscalar(dmatrixH)
+    if isarray(dmatrixH)
         dnorm = norm(dmatrixH(:,end),2)/sqrt(N);
         dmatrixH = dmatrixH/dnorm;
     end
@@ -128,19 +128,19 @@ end
 %% Find the HGLET/GHWT best-basis
 
 % allocate/initialize ==> order matters here
-if ~isscalar(dmatrixHsym)
+if isarray(dmatrixHsym)
     dvec = dmatrixHsym(:,jmax);
     trans = repmat(transHsym,N,1);
 end
-if ~isscalar(dmatrixG)
+if isarray(dmatrixG)
     dvec = dmatrixG(:,jmax);
     trans = repmat(transG,N,1);
 end
-if ~isscalar(dmatrixHrw)
+if isarray(dmatrixHrw)
     dvec = dmatrixHrw(:,jmax);
     trans = repmat(transHrw,N,1);
 end
-if ~isscalar(dmatrixH)
+if isarray(dmatrixH)
     dvec = dmatrixH(:,jmax);
     trans = repmat(transH,N,1);
 end
@@ -170,7 +170,7 @@ for j = jmax-1:-1:1
         end
             
         %%%%% compute the cost of the HGLET-Lsym coefficients
-        if ~isscalar(dmatrixHsym)
+        if isarray(dmatrixHsym)
             costNEW = costfun( dmatrixHsym(indr,j) );
             % change the best basis if the new cost is less expensive
             if costBB >= costNEW - tol
@@ -179,7 +179,7 @@ for j = jmax-1:-1:1
         end
         
         %%%%% compute the cost of the GHWT coefficients
-        if ~isscalar(dmatrixG)
+        if isarray(dmatrixG)
             if length(indr) == 1 || norm(dmatrixG(indr(2:end),j),1) / norm(dmatrixG(indr(1),1),1)  < 10^-3
                 % specify as the default transform for a constant segment
                 [costBB, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(-1,dmatrixG(indr,j),j,transG);
@@ -193,7 +193,7 @@ for j = jmax-1:-1:1
         end
         
         %%%%% compute the cost of the HGLET-Lrw coefficients
-        if ~isscalar(dmatrixHrw)
+        if isarray(dmatrixHrw)
             % specify as the default transform for a constant segment
             if length(indr) == 1 || norm(dmatrixHrw(indr(2:end),j),1) / norm(dmatrixHrw(indr(1),1),1)  < 10^-3
                 [costBB, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(-1,dmatrixHrw(indr,j),j,transHrw);
@@ -207,7 +207,7 @@ for j = jmax-1:-1:1
         end
         
         %%%%% compute the cost of the HGLET-L coefficients
-        if ~isscalar(dmatrixH)
+        if isarray(dmatrixH)
             if length(indr) == 1 || norm(dmatrixH(indr(2:end),j),1) / norm(dmatrixH(indr(1),1),1)  < 10^-3
                 % specify as the default transform for a constant segment
                 [~, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(-1,dmatrixH(indr,j),j,transH);
@@ -231,7 +231,7 @@ BS = levlist2levlengths(GP,BS);
 
 
 % if using MDL, rescale the coefficients
-if fcols == 1
+if useMDL && fcols == 1
     dvec = dvec*dnorm;
 end
 
@@ -239,22 +239,22 @@ end
 % if we flattened dmatrix, then "unflatten" the expansion coefficients
 if fcols > 1
     % create vectors of coefficients (which are zero if the transform's coefficients were not included as function inputs)
-    if ~isscalar(dmatrixH)
+    if isarray(dmatrixH)
         dvecH = dmatrix2dvec(dmatrix0H,GP,BS);
     else
         dvecH = zeros(N,fcols);
     end
-    if ~isscalar(dmatrixHrw)
+    if isarray(dmatrixHrw)
         dvecHrw = dmatrix2dvec(dmatrix0Hrw,GP,BS);
     else
         dvecHrw = zeros(N,fcols);
     end
-    if ~isscalar(dmatrixHsym)
+    if isarray(dmatrixHsym)
         dvecHsym = dmatrix2dvec(dmatrix0Hsym,GP,BS);
     else
         dvecHsym = zeros(N,fcols);
     end
-    if ~isscalar(dmatrixG)
+    if isarray(dmatrixG)
         dvecG = dmatrix2dvec(dmatrix0G,GP,BS);
     else
         dvecG = zeros(N,fcols);
@@ -286,4 +286,17 @@ trans = repmat(trans,n,1);
 
 costs = zeros(n,1);
 costs(1) = costNEW;
+end
+
+
+
+
+function TF = isarray(x)
+% Return true if x is a non-empty numerical array and false otherwise
+
+if ~isempty(x) && isnumeric(x) && ~isscalar(x)
+    TF = true;
+else
+    TF = false;
+end
 end
