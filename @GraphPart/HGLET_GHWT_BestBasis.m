@@ -180,44 +180,29 @@ for j = jmax-1:-1:1
         
         %%%%% compute the cost of the GHWT coefficients
         if isarray(dmatrixG)
-% % %             if length(indr) == 1 || norm(dmatrixG(indr(2:end),j),1) / norm(dmatrixG(indr(1),1),1)  < 10^-3
-% % %                 % specify as the default transform for a constant segment
-% % %                 [costBB, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(-1,dmatrixG(indr,j),j,transG);
-% % %             else
-                costNEW = costfun( dmatrixG(indr,j) );
-                % change the best basis if the new cost is less expensive
-                if costBB >= costNEW - tol
-                    [costBB, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(costNEW,dmatrixG(indr,j),j,transG);
-                end
-% % %             end
+            costNEW = costfun( dmatrixG(indr,j) );
+            % change the best basis if the new cost is less expensive
+            if costBB >= costNEW - tol
+                [costBB, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(costNEW,dmatrixG(indr,j),j,transG);
+            end
         end
         
         %%%%% compute the cost of the HGLET-Lrw coefficients
         if isarray(dmatrixHrw)
-% % %             % specify as the default transform for a constant segment
-% % %             if length(indr) == 1 || norm(dmatrixHrw(indr(2:end),j),1) / norm(dmatrixHrw(indr(1),1),1)  < 10^-3
-% % %                 [costBB, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(-1,dmatrixHrw(indr,j),j,transHrw);
-% % %             else
-                costNEW = costfun( dmatrixHrw(indr,j) );
-                % change the best basis if the new cost is less expensive
-                if costBB >= costNEW - tol
-                    [costBB, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(costNEW,dmatrixHrw(indr,j),j,transHrw);
-                end
-% % %             end
+            costNEW = costfun( dmatrixHrw(indr,j) );
+            % change the best basis if the new cost is less expensive
+            if costBB >= costNEW - tol
+                [costBB, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(costNEW,dmatrixHrw(indr,j),j,transHrw);
+            end
         end
         
         %%%%% compute the cost of the HGLET-L coefficients
         if isarray(dmatrixH)
-% % %             if length(indr) == 1 || norm(dmatrixH(indr(2:end),j),1) / norm(dmatrixH(indr(1),1),1)  < 10^-3
-% % %                 % specify as the default transform for a constant segment
-% % %                 [~, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(-1,dmatrixH(indr,j),j,transH);
-% % %             else
-                costNEW = costfun( dmatrixH(indr,j) );
-                % change the best basis if the new cost is less expensive
-                if costBB >= costNEW - tol
-                    [~, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(costNEW,dmatrixH(indr,j),j,transH);
-                end
-% % %             end
+            costNEW = costfun( dmatrixH(indr,j) );
+            % change the best basis if the new cost is less expensive
+            if costBB >= costNEW - tol
+                [~, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(costNEW,dmatrixH(indr,j),j,transH);
+            end
         end
     end
 end
