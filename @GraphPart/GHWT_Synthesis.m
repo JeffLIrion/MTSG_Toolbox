@@ -65,50 +65,56 @@ if c2f
                 elseif n > 1
                     % the index that marks the start of the second subregion
                     rs2 = rs1+1;
-                    while GP.tag(rs2,j+1) ~= 0 && rs2 < N+1
+                    while rs2 < rs3 && GP.tag(rs2,j+1) ~= 0 %%%&& rs2 < N+1
                         rs2 = rs2+1;
                     end
+                    
+                    % the parent region is a copy of the subregion
+                    if rs2 == rs3
+                        dmatrix(rs1:rs3-1,j+1,:) = dmatrix(rs1:rs3-1,j,:);
+                    
+                    % the parent region has 2 child regions
+                    else
+                        % the number of points in the first subregion
+                        n1 = double(rs2 - rs1);
 
-                    % the number of points in the first subregion
-                    n1 = double(rs2 - rs1);
+                        % the number of points in the second subregion
+                        n2 = double(rs3 - rs2);
 
-                    % the number of points in the second subregion
-                    n2 = double(rs3 - rs2);
+                        %%% SCALING COEFFICIENTS
+                        dmatrix(rs1,j+1,:) = ( sqrt(n1)*dmatrix(rs1,j,:) + sqrt(n2)*dmatrix(rs1+1,j,:) )/sqrt(n);
+                        dmatrix(rs2,j+1,:) = ( sqrt(n2)*dmatrix(rs1,j,:) - sqrt(n1)*dmatrix(rs1+1,j,:) )/sqrt(n);
 
-                    %%% SCALING COEFFICIENTS
-                    dmatrix(rs1,j+1,:) = ( sqrt(n1)*dmatrix(rs1,j,:) + sqrt(n2)*dmatrix(rs1+1,j,:) )/sqrt(n);
-                    dmatrix(rs2,j+1,:) = ( sqrt(n2)*dmatrix(rs1,j,:) - sqrt(n1)*dmatrix(rs1+1,j,:) )/sqrt(n);
+                        %%% HAAR-LIKE & WALSH-LIKE COEFFICIENTS
 
-                    %%% HAAR-LIKE & WALSH-LIKE COEFFICIENTS
+                        % search through the remaining coefficients in each subregion
+                        parent = rs1+2;
+                        child1 = rs1+1;
+                        child2 = rs2+1;
+                        while child1 < rs2 || child2 < rs3
+                            % subregion 1 has the smaller tag
+                            if child2 == rs3 || (GP.tag(child1,j+1) < GP.tag(child2,j+1) && child1 < rs2)
+                                dmatrix(child1,j+1,:) = dmatrix(parent,j,:);
+                                child1 = child1+1;
+                                parent = parent+1;
 
-                    % search through the remaining coefficients in each subregion
-                    parent = rs1+2;
-                    child1 = rs1+1;
-                    child2 = rs2+1;
-                    while child1 < rs2 || child2 < rs3
-                        % subregion 1 has the smaller tag
-                        if child2 == rs3 || (GP.tag(child1,j+1) < GP.tag(child2,j+1) && child1 < rs2)
-                            dmatrix(child1,j+1,:) = dmatrix(parent,j,:);
-                            child1 = child1+1;
-                            parent = parent+1;
+                            % subregion 2 has the smaller tag
+                            elseif child1 == rs2 || (GP.tag(child2,j+1) < GP.tag(child1,j+1) && child2 < rs3)
+                                dmatrix(child2,j+1,:) = dmatrix(parent,j,:);
+                                child2 = child2+1;
+                                parent = parent+1;
 
-                        % subregion 2 has the smaller tag
-                        elseif child1 == rs2 || (GP.tag(child2,j+1) < GP.tag(child1,j+1) && child2 < rs3)
-                            dmatrix(child2,j+1,:) = dmatrix(parent,j,:);
-                            child2 = child2+1;
-                            parent = parent+1;
-
-                        % both subregions have the same tag
-                        else
-                            dmatrix(child1,j+1,:) = ( dmatrix(parent,j,:) + dmatrix(parent+1,j,:) )/sqrt(2);
-                            dmatrix(child2,j+1,:) = ( dmatrix(parent,j,:) - dmatrix(parent+1,j,:) )/sqrt(2);
-                            child1 = child1+1;
-                            child2 = child2+1;
-                            parent = parent+2;
+                            % both subregions have the same tag
+                            else
+                                dmatrix(child1,j+1,:) = ( dmatrix(parent,j,:) + dmatrix(parent+1,j,:) )/sqrt(2);
+                                dmatrix(child2,j+1,:) = ( dmatrix(parent,j,:) - dmatrix(parent+1,j,:) )/sqrt(2);
+                                child1 = child1+1;
+                                child2 = child2+1;
+                                parent = parent+2;
+                            end
                         end
                     end
                 end
-
             end
         end
     end
@@ -141,62 +147,69 @@ else
                 else
                     % the index that marks the start of the second subregion
                     rs2 = rs1+1;
-                    while GP.tagf2c(rs1,j+1) == GP.tagf2c(rs2,j+1) && rs2 < N+1
+                    while rs2 < rs3 && GP.tagf2c(rs1,j+1) == GP.tagf2c(rs2,j+1)%%% && rs2 < N+1
                         rs2 = rs2+1;
                     end
-
-                    % the current coefficient in the parent region with which we  are dealing
-                    parent = rs1;
                     
-                    % the current coefficients in the child regions with which we are dealing
-                    child1 = rs1;
-                    child2 = rs2;
+                    % the parent region is a copy of the subregion
+                    if rs2 == rs3
+                        dmatrix(rs1:rs3-1,j+1,:) = dmatrix(rs1:rs3-1,j,:);
                     
-                    
-                    %%% SCALING COEFFICIENTS
-                    if GP.tagf2c(rs1,j) == 0
-                        while parent < rs3
-                            % 1 coefficient formed from 1 coefficient
-                            if GP.compinfof2c(child1,j+1) == 0
-                                dmatrix(parent,j,:) = dmatrix(child1,j+1,:);
-                                parent = parent+1;
-                                child1 = child1+1;
-                                
-                            % 2 coefficients formed from 2 coefficients
-                            else
-                                % the number of points in the first subregion
-                                n1 = double(GP.compinfof2c(child1,j+1));
-
-                                % the number of points in the second subregion
-                                n2 = double(GP.compinfof2c(child2,j+1));
-                                
-                                % the number of points in the parent region
-                                n = n1+n2;
-                                
-                                dmatrix(parent,  j,:) = ( sqrt(n1)*dmatrix(child1,j+1,:) + sqrt(n2)*dmatrix(child2,j+1,:) )/sqrt(n);
-                                dmatrix(parent+1,j,:) = ( sqrt(n2)*dmatrix(child1,j+1,:) - sqrt(n1)*dmatrix(child2,j+1,:) )/sqrt(n);
-                                parent = parent+2;
-                                child1 = child1+1;
-                                child2 = child2+1;
-                            end
-                        end
-                        
-                    %%% HAAR-LIKE & WALSH-LIKE COEFFICIENTS
+                    % the parent region has 2 child regions
                     else
-                        while parent < rs3
-                            % 1 coefficient formed from 1 coefficient
-                            if GP.compinfof2c(child1,j+1) == 0
-                                dmatrix(parent,j,:) = dmatrix(child1,j+1,:);
-                                parent = parent+1;
-                                child1 = child1+1;
-                                
-                            % 2 coefficients formed from 2 coefficients
-                            else
-                                dmatrix(parent  ,j,:) = ( dmatrix(child1,j+1,:) + dmatrix(child2,j+1,:) )/sqrt(2);
-                                dmatrix(parent+1,j,:) = ( dmatrix(child1,j+1,:) - dmatrix(child2,j+1,:) )/sqrt(2);
-                                parent = parent+2;
-                                child1 = child1+1;
-                                child2 = child2+1;
+                        % the current coefficient in the parent region with which we  are dealing
+                        parent = rs1;
+
+                        % the current coefficients in the child regions with which we are dealing
+                        child1 = rs1;
+                        child2 = rs2;
+
+
+                        %%% SCALING COEFFICIENTS
+                        if GP.tagf2c(rs1,j) == 0
+                            while parent < rs3
+                                % 1 coefficient formed from 1 coefficient
+                                if GP.compinfof2c(child1,j+1) == 0
+                                    dmatrix(parent,j,:) = dmatrix(child1,j+1,:);
+                                    parent = parent+1;
+                                    child1 = child1+1;
+
+                                % 2 coefficients formed from 2 coefficients
+                                else
+                                    % the number of points in the first subregion
+                                    n1 = double(GP.compinfof2c(child1,j+1));
+
+                                    % the number of points in the second subregion
+                                    n2 = double(GP.compinfof2c(child2,j+1));
+
+                                    % the number of points in the parent region
+                                    n = n1+n2;
+
+                                    dmatrix(parent,  j,:) = ( sqrt(n1)*dmatrix(child1,j+1,:) + sqrt(n2)*dmatrix(child2,j+1,:) )/sqrt(n);
+                                    dmatrix(parent+1,j,:) = ( sqrt(n2)*dmatrix(child1,j+1,:) - sqrt(n1)*dmatrix(child2,j+1,:) )/sqrt(n);
+                                    parent = parent+2;
+                                    child1 = child1+1;
+                                    child2 = child2+1;
+                                end
+                            end
+
+                        %%% HAAR-LIKE & WALSH-LIKE COEFFICIENTS
+                        else
+                            while parent < rs3
+                                % 1 coefficient formed from 1 coefficient
+                                if GP.compinfof2c(child1,j+1) == 0
+                                    dmatrix(parent,j,:) = dmatrix(child1,j+1,:);
+                                    parent = parent+1;
+                                    child1 = child1+1;
+
+                                % 2 coefficients formed from 2 coefficients
+                                else
+                                    dmatrix(parent  ,j,:) = ( dmatrix(child1,j+1,:) + dmatrix(child2,j+1,:) )/sqrt(2);
+                                    dmatrix(parent+1,j,:) = ( dmatrix(child1,j+1,:) - dmatrix(child2,j+1,:) )/sqrt(2);
+                                    parent = parent+2;
+                                    child1 = child1+1;
+                                    child2 = child2+1;
+                                end
                             end
                         end
                     end

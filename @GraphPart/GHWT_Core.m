@@ -55,63 +55,72 @@ if exist('dmatrix','var')
             elseif n > 1
                 % the index that marks the start of the second subregion
                 rs2 = rs1+1;
-                while tag(rs2, j+1) ~= 0 && rs2 < N+1
+                while rs2 < rs3 && tag(rs2, j+1) ~= 0%%% && rs2 < N+1
                     rs2 = rs2+1;
                 end
 
-                % the number of points in the first subregion
-                n1 = double(rs2 - rs1);
+                % the parent region is a copy of the subregion
+                if rs2 == rs3
+                    dmatrix(rs1:rs3-1,j,:) = dmatrix(rs1:rs3-1,j+1,:);
+                    tag(rs1:rs3-1,j) = tag(rs1:rs3-1,j+1);
+                    compinfo(rs1:rs3-1,j) = compinfo(rs1:rs3-1,j+1);
+                    
+                % the parent region has 2 child regions
+                else
+                    % the number of points in the first subregion
+                    n1 = double(rs2 - rs1);
 
-                % the number of points in the second subregion
-                n2 = double(rs3 - rs2);
+                    % the number of points in the second subregion
+                    n2 = double(rs3 - rs2);
 
-                %%% SCALING COEFFICIENT (n > 1)
-                dmatrix(rs1,j,:)    = ( sqrt(n1)*dmatrix(rs1,j+1,:) + sqrt(n2)*dmatrix(rs2,j+1,:) )/sqrt(n);
-                compinfo(rs1,j)   = n1;
+                    %%% SCALING COEFFICIENT (n > 1)
+                    dmatrix(rs1,j,:)    = ( sqrt(n1)*dmatrix(rs1,j+1,:) + sqrt(n2)*dmatrix(rs2,j+1,:) )/sqrt(n);
+                    compinfo(rs1,j)   = n1;
 
-                %%% HAAR-LIKE COEFFICIENT
-                dmatrix(rs1+1,j,:)  = ( sqrt(n2)*dmatrix(rs1,j+1,:) - sqrt(n1)*dmatrix(rs2,j+1,:) )/sqrt(n);
-                tag(rs1+1,j)      = 1;
-                compinfo(rs1+1,j) = n2;
+                    %%% HAAR-LIKE COEFFICIENT
+                    dmatrix(rs1+1,j,:)  = ( sqrt(n2)*dmatrix(rs1,j+1,:) - sqrt(n1)*dmatrix(rs2,j+1,:) )/sqrt(n);
+                    tag(rs1+1,j)      = 1;
+                    compinfo(rs1+1,j) = n2;
 
-                %%% WALSH-LIKE COEFFICIENTS
-                % sweep through the coefficients in subregion 1 and subregion 2
+                    %%% WALSH-LIKE COEFFICIENTS
+                    % sweep through the coefficients in subregion 1 and subregion 2
 
-                % the index of the new coefficient(s) to be created on level j
-                parent = rs1+2;
+                    % the index of the new coefficient(s) to be created on level j
+                    parent = rs1+2;
 
-                % the index of the current coefficients in subregions 1 and 2
-                child1 =  rs1+1;
-                child2 =  rs2+1;
+                    % the index of the current coefficients in subregions 1 and 2
+                    child1 =  rs1+1;
+                    child2 =  rs2+1;
 
-                while parent < rs3
-                    % no matching coefficient (use subregion 1)
-                    if child1 < rs2 && (child2 == rs3 || tag(child1,j+1) < tag(child2,j+1))
-                        dmatrix(parent,j,:) = dmatrix(child1,j+1,:);
-                        tag(parent,j) = 2*tag(child1,j+1);
-                        child1 = child1+1;
-                        parent = parent+1;
+                    while parent < rs3
+                        % no matching coefficient (use subregion 1)
+                        if child1 < rs2 && (child2 == rs3 || tag(child1,j+1) < tag(child2,j+1))
+                            dmatrix(parent,j,:) = dmatrix(child1,j+1,:);
+                            tag(parent,j) = 2*tag(child1,j+1);
+                            child1 = child1+1;
+                            parent = parent+1;
 
-                    % no matching coefficient (use subregion 2)
-                    elseif child2 < rs3 && (child1 == rs2 || tag(child2,j+1) < tag(child1,j+1))
-                        dmatrix(parent,j,:) = dmatrix(child2,j+1,:);
-                        tag(parent,j) = 2*tag(child2,j+1);
-                        child2 = child2+1;
-                        parent = parent+1;
+                        % no matching coefficient (use subregion 2)
+                        elseif child2 < rs3 && (child1 == rs2 || tag(child2,j+1) < tag(child1,j+1))
+                            dmatrix(parent,j,:) = dmatrix(child2,j+1,:);
+                            tag(parent,j) = 2*tag(child2,j+1);
+                            child2 = child2+1;
+                            parent = parent+1;
 
-                    % matching coefficients
-                    else
-                        dmatrix(parent,j,:)    = ( dmatrix(child1,j+1,:) + dmatrix(child2,j+1,:) )/sqrt(2);
-                        tag(parent,j)        = 2*tag(child1,j+1);
-                        compinfo(parent,j)   = 1;
+                        % matching coefficients
+                        else
+                            dmatrix(parent,j,:)    = ( dmatrix(child1,j+1,:) + dmatrix(child2,j+1,:) )/sqrt(2);
+                            tag(parent,j)        = 2*tag(child1,j+1);
+                            compinfo(parent,j)   = 1;
 
-                        dmatrix(parent+1,j,:)  = ( dmatrix(child1,j+1,:) - dmatrix(child2,j+1,:) )/sqrt(2);
-                        tag(parent+1,j)      = 2*tag(child1,j+1)+1;
-                        compinfo(parent+1,j) = 1;
+                            dmatrix(parent+1,j,:)  = ( dmatrix(child1,j+1,:) - dmatrix(child2,j+1,:) )/sqrt(2);
+                            tag(parent+1,j)      = 2*tag(child1,j+1)+1;
+                            compinfo(parent+1,j) = 1;
 
-                        child1 = child1+1;
-                        child2 = child2+1;
-                        parent = parent+2;
+                            child1 = child1+1;
+                            child2 = child2+1;
+                            parent = parent+2;
+                        end
                     end
                 end
             end
@@ -136,57 +145,65 @@ else
             if n > 1
                 % the index that marks the start of the second subregion
                 rs2 = rs1+1;
-                while tag(rs2, j+1) ~= 0 && rs2 < N+1
+                while rs2 < rs3 && tag(rs2, j+1) ~= 0%%% && rs2 < N+1
                     rs2 = rs2+1;
                 end
+                
+                % the parent region is a copy of the subregion
+                if rs2 == rs3
+                    tag(rs1:rs3-1,j) = tag(rs1:rs3-1,j+1);
+                    compinfo(rs1:rs3-1,j) = compinfo(rs1:rs3-1,j+1);
+                    
+                % the parent region has 2 child regions
+                else
+                    % the number of points in the first subregion
+                    n1 = double(rs2 - rs1);
 
-                % the number of points in the first subregion
-                n1 = double(rs2 - rs1);
+                    % the number of points in the second subregion
+                    n2 = double(rs3 - rs2);
 
-                % the number of points in the second subregion
-                n2 = double(rs3 - rs2);
+                    %%% SCALING COEFFICIENT (n > 1)
+                    compinfo(rs1,j) = n1;
 
-                %%% SCALING COEFFICIENT (n > 1)
-                compinfo(rs1,j) = n1;
+                    %%% HAAR-LIKE COEFFICIENT
+                    tag(rs1+1,j) = 1;
+                    compinfo(rs1+1,j) = n2;
 
-                %%% HAAR-LIKE COEFFICIENT
-                tag(rs1+1,j) = 1;
-                compinfo(rs1+1,j) = n2;
+                    %%% WALSH-LIKE COEFFICIENTS
+                    % sweep through the coefficients in subregion 1 and subregion 2
 
-                %%% WALSH-LIKE COEFFICIENTS
-                % sweep through the coefficients in subregion 1 and subregion 2
+                    % the index of the new coefficient(s) to be created on level j
+                    parent = rs1+2;
 
-                % the index of the new coefficient(s) to be created on level j
-                parent = rs1+2;
+                    % the index of the current coefficients in subregions 1 and 2
+                    child1 =  rs1+1;
+                    child2 =  rs2+1;
 
-                % the index of the current coefficients in subregions 1 and 2
-                child1 =  rs1+1;
-                child2 =  rs2+1;
+                    while parent < rs3
+                        % no matching coefficient (use subregion 1)
+                        if child1 < rs2 && (child2 == rs3 || tag(child1,j+1) < tag(child2,j+1))
+                            tag(parent,j) = 2*tag(child1,j+1);
+                            child1 = child1+1;
+                            parent = parent+1;
 
-                while parent < rs3
-                    % no matching coefficient (use subregion 1)
-                    if child1 < rs2 && (child2 == rs3 || tag(child1,j+1) < tag(child2,j+1))
-                        tag(parent,j) = 2*tag(child1,j+1);
-                        child1 = child1+1;
-                        parent = parent+1;
+                        % no matching coefficient (use subregion 2)
+                        elseif child2 < rs3 && (child1 == rs2 || tag(child2,j+1) < tag(child1,j+1))
+                            tag(parent,j) = 2*tag(child2,j+1);
+                            child2 = child2+1;
+                            parent = parent+1;
 
-                    % no matching coefficient (use subregion 2)
-                    elseif child2 < rs3 && (child1 == rs2 || tag(child2,j+1) < tag(child1,j+1))
-                        tag(parent,j) = 2*tag(child2,j+1);
-                        child2 = child2+1;
-                        parent = parent+1;
+                        % matching coefficients
+                        else
+                            tag(parent,j) = 2*tag(child1,j+1);
+                            compinfo(parent,j) = 1;
 
-                    % matching coefficients
-                    else
-                        tag(parent,j) = 2*tag(child1,j+1);
-                        compinfo(parent,j) = 1;
+                            tag(parent+1,j) = 2*tag(child1,j+1)+1;
+                            compinfo(parent+1,j) = 1;
 
-                        tag(parent+1,j) = 2*tag(child1,j+1)+1;
-                        compinfo(parent+1,j) = 1;
-
-                        child1 = child1+1;
-                        child2 = child2+1;
-                        parent = parent+2;
+                            child1 = child1+1;
+                            child2 = child2+1;
+                            parent = parent+2;
+                        end
                     end
                 end
             end
