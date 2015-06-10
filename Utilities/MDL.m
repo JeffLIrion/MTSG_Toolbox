@@ -28,7 +28,7 @@ n = length(x);
 
 % compute the costs of delta + quantized coefficients + sigmasq "reward"
 for k = kmin:kmax
-    % define the precision (Inf-norm)
+    % define the precision
     delta = 2^(-k);
 
     % compute integer coefficients
