@@ -70,6 +70,8 @@ if exist('f','var')
         datastruct.f = f;
     elseif fcols == length(W)
         datastruct.f = f';
+    elseif isempty(datastruct.W)
+        datastruct.f = f;
     else
         datastruct.f = [];
     end

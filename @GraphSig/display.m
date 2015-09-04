@@ -25,9 +25,6 @@ fprintf('Length = %d',G.length);
 
 
 %% Size and Dim
-Gsize = sprintf('[%d, %d]',G.size(1),G.size(2));
-
-fprintf('\nSize   = %s',Gsize);
 fprintf('\nDim    = %d',G.dim);
 
 
