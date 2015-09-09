@@ -21,7 +21,10 @@ end
 if ~isempty(G.plotspecs)
     fprintf('Plot\nSpecs  = %s\n',G.plotspecs);
 end
-fprintf('Length = %d',G.length);
+N = length(G.W);
+M = nnz(G.W)/2;
+fprintf('Nodes  = %d',N);
+fprintf('\nEdges  = %d',M);
 
 
 %% Size and Dim
