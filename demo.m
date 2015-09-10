@@ -9,23 +9,15 @@ N = 6;
 
 %% 0.  Create a GraphSig object for a path graph of length N
 
-% the weight matrix
-e = ones(N,1);
-W = spdiags([ e 0*e e], [-1 0 1],N,N);
+% generate a signal of length N
+f = ((1:N) .* sin(1:N))';
 
-% the spatial coordinates
-xy = (1:N)';
-
-% the signal on the graph
-f = xy .* sin(xy);
-
-% additional info for the GraphSig object
+% generate a path graph of length N
 dataname = sprintf('A signal on the path graph of length %d',N);
-plotspecs = 'notitle stem';
-
-% create the GraphSig object
-G = GraphSig(W,xy,f,dataname,plotspecs);
+G = Gpath(N,f,dataname);
+G = EditPlotSpecs(G,'notitle stem');
 clear N e W xy f dataname plotspecs
+
 display(G);
 pause
 
