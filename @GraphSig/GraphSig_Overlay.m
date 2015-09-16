@@ -42,7 +42,7 @@ if fcols ~= 1
 end
 
 % extract the plot specifications
-[symmetric,graybar,gray255bar,copperbar,notitle,nocolorbar,~,CLim,cmin,cmax,ptsize,~,~,marker,verbatim,verbtext] = ExtractPlotSpecs(G1);
+[symmetric,graybar,gray255bar,copperbar,notitle,nocolorbar,~,CLim,cmin,cmax,ptsize,~,~,marker,verbatim,verbtext,sortnodes] = ExtractPlotSpecs(G1);
 set(0, 'DefaultFigureVisible', 'on');
 
 % specify parameters that aren't given as inputs
@@ -61,6 +61,13 @@ end
 
 
 %% The Plot
+
+if sortnodes
+    [~,IX] = sort(abs(G1.f),'descend');
+    G1.W = G1.W(IX,IX);
+    G1.xy = G1.xy(IX,:);
+    G1.f = G1.f(IX);
+end
 
 % plot the graph
 fig = figure('visible','on');

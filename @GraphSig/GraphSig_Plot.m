@@ -46,7 +46,7 @@ end
 %% Case 2: the graph does have spatial coordinates
 
 % extract the plot specifications
-[symmetric,graybar,gray255bar,copperbar,notitle,nocolorbar,stemplot,CLim,cmin,cmax,ptsize,linewide,linecolor,marker,verbatim,verbtext] = ExtractPlotSpecs(G);
+[symmetric,graybar,gray255bar,copperbar,notitle,nocolorbar,stemplot,CLim,cmin,cmax,ptsize,linewide,linecolor,marker,verbatim,verbtext,sortnodes] = ExtractPlotSpecs(G);
 set(0, 'DefaultFigureVisible', 'on');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -115,6 +115,13 @@ else
     ls = strcat('-',linecolor);
     
     fig = figure('visible','on');
+    
+    if sortnodes
+        [~,IX] = sort(abs(G.f),'descend');
+        G.W = G.W(IX,IX);
+        G.xy = G.xy(IX,:);
+        G.f = G.f(IX);
+    end
     
     % plot the graph
     if isempty(linewide)

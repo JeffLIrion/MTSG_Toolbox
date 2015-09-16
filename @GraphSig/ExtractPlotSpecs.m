@@ -1,4 +1,4 @@
-function [symmetric,graybar,gray255bar,copperbar,notitle,nocolorbar,stemplot,CLim,cmin,cmax,ptsize,linewide,linecolor,marker,verbatim,verbtext] = ExtractPlotSpecs(G)
+function [symmetric,graybar,gray255bar,copperbar,notitle,nocolorbar,stemplot,CLim,cmin,cmax,ptsize,linewide,linecolor,marker,verbatim,verbtext,sortnodes] = ExtractPlotSpecs(G)
 % Extract the important information contained in the 'plotspecs' of a 
 % GraphSig object
 %
@@ -196,6 +196,12 @@ if ~isempty(verbstart)
     end
 else
     verbtext = [];
+end
+
+% sort the nodes?
+sortnodes = false;
+if ~isempty(strfind(G.plotspecs,'sortnodes'))
+    sortnodes = true;
 end
 
 
