@@ -35,6 +35,10 @@ function [ind,rs,tag,compinfo,rsf2c,tagf2c,compinfof2c,method] = ExtractData(GP)
 
 
 
+if nargout > 2 && isempty(GP.rsf2c)
+    GP = GHWT_Info(GP);
+end
+
 ind = GP.ind;
 rs = GP.rs;
 tag = GP.tag;
