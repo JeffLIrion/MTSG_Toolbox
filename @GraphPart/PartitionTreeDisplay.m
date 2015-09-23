@@ -91,7 +91,7 @@ if nargin == 1
 end
 
 % label the y-axis
-ylabel('Partition Level (j)');
+ylabel('Level (j)');
 ax = gca;
 if nargin == 1
     yticklabels = cellstr(int2str((jmax-1:-1:0)'));
