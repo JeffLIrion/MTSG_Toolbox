@@ -56,7 +56,7 @@ if G.dim == 1
     fig = figure('visible','on');
     if G.length < 65 || stemplot
         ls = strcat('-',linecolor,'o');
-        stem(G.xy, G.f, ls,'LineWidth',2,'MarkerFaceColor','b','MarkerSize',ptsize(1));
+        stem(G.xy, G.f, ls,'LineWidth',2,'MarkerFaceColor',linecolor,'MarkerSize',ptsize(1));
     else
         ls = strcat('-',linecolor);
         plot(G.xy, G.f, ls,'LineWidth',linewide);

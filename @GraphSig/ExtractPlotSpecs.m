@@ -145,7 +145,7 @@ end
 
 % what color should the lines (1D) / graph edges (2D & 3D) be?
 l = length(G.plotspecs);
-s = strfind(G.plotspecs,'olor'); %olorbar
+s = strfind(G.plotspecs,'olor');
 while ~isempty(s) && s(end) > 3 && s(end)+5 < l && strcmp(G.plotspecs(s(end)-3:s(end)+6),'nocolorbar')
     s(end) = [];
 end
