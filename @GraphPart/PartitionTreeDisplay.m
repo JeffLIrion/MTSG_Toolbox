@@ -93,6 +93,7 @@ end
 % label the y-axis
 ylabel('Level (j)');
 ax = gca;
+ylim([0,jmax-1]);
 if nargin == 1
     yticklabels = cellstr(int2str((jmax-1:-1:0)'));
 else
