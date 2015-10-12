@@ -22,6 +22,8 @@ function [symmetric,graybar,gray255bar,copperbar,notitle,nocolorbar,stemplot,CLi
 %   marker          the color of the line (1D) / nodes (2D & 3D)
 %   verbatim        use other special instructions
 %   verbtext        the specified special instructions
+%   sortnodes       plot the signal values from smallest to largest in 
+%                   magnitude
 %   
 %
 %
