@@ -272,16 +272,3 @@ trans = repmat(trans,n,1);
 costs = zeros(n,1);
 costs(1) = costNEW;
 end
-
-
-
-
-function TF = isarray(x)
-% Return true if x is a non-empty numerical array and false otherwise
-
-if ~isempty(x) && isnumeric(x) && ~isscalar(x)
-    TF = true;
-else
-    TF = false;
-end
-end
