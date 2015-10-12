@@ -116,12 +116,13 @@ levlistc2f( levlistc2f==0 ) = [];
 
 BSc2f = BasisSpec(levlistc2f,[],true,'GHWT c2f Best Basis');
 BSc2f = levlist2levlengths(GP,BSc2f);
-costc2f = sum(costs);
+costc2f = costfun(dvecc2f);
 
 
 % if using MDL, rescale the coefficients
 if useMDL && fcols == 1
     dvecc2f = dvecc2f*dnorm;
+    costc2f = sum(costs);
 end
 
 
@@ -165,12 +166,13 @@ levlistf2c( levlistf2c==0 ) = [];
 
 BSf2c = BasisSpec(levlistf2c,[],false,'GHWT f2c Best Basis');
 BSf2c = levlist2levlengths(GP,BSf2c);
-costf2c = sum(costs);
+costf2c = costfun(dvecf2c);
 
 
 % if using MDL, rescale the coefficients
 if useMDL && fcols == 1
     dvecf2c = dvecf2c*dnorm;
+    costf2c = sum(costs);
 end
 
 
