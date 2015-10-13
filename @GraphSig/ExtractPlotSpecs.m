@@ -76,13 +76,11 @@ if ~isempty(strfind(G.plotspecs,'stem'))
 end
 
 % what should the dynamic display range be?
-CLim = false;
-s = strfind(G.plotspecs,'CLim[');
-if ~isempty(s)
-    [cmin,cmax] = bracket_comma_bracket(G.plotspecs(s(end):end));
-    if ~isempty(cmin) && ~isempty(cmax)
-        CLim = true;
-    end
+[temp,CLim] = find_between(G.plotspecs,'CLim[',']');
+if CLim
+    temp = eval(sprintf('[%s]',temp));
+    cmin = temp(1);
+    cmax = temp(2);
 else
     cmin = [];
     cmax = [];
@@ -94,69 +92,44 @@ if G.dim == 1
 else
     ptsize = 25;
 end
-s = strfind(G.plotspecs,'size[');
-if ~isempty(s)
-    [x1,x2] = bracket_comma_bracket(G.plotspecs(s(end):end));
-    if ~isempty(x1) && ~isempty(x2)
-        ptsize = [x1;x2];
-    end
+
+[temp,TF] = find_between(G.plotspecs,'size[',']');
+if TF
+    ptsize = eval(sprintf('[%s]',temp));
 else
-    s = strfind(G.plotspecs,'size');
-    l = length(G.plotspecs);
-    if ~isempty(s) && l > s(end)+3 && isstrprop(G.plotspecs(s(end)+4),'digit') == 1
-        t = s(end)+4;
-        onedot = false;
-        while t < l
-            if isstrprop(G.plotspecs(t+1),'digit')
-                t = t+1;
-            elseif strcmp(G.plotspecs(t+1),'.') && ~onedot
-                t = t+1;
-                onedot = true;
-            else
-                break
-            end            
-        end
-        ptsize = str2double(G.plotspecs(s(end)+4:t));
+    [temp,TF] = find_after(G.plotspecs,'size');
+    if TF
+        ptsize = temp;
     end
 end
 
 % how wide should the lines be?
-l = length(G.plotspecs);
-s = strfind(G.plotspecs,'idth');
-if ~isempty(s) && l > s(end)+3 && isstrprop(G.plotspecs(s(end)+4),'digit') == 1
-    t = s(end)+4;
-    onedot = false;
-    while t < l
-        if isstrprop(G.plotspecs(t+1),'digit')
-            t = t+1;
-        elseif strcmp(G.plotspecs(t+1),'.') && ~onedot
-            t = t+1;
-            onedot = true;
-        else
-            break
-        end
-    end
-    linewide = str2double(G.plotspecs(s(end)+4:t));
+if G.dim == 1
+    linewide = 1;
 else
-    if G.dim == 1
-        linewide = 1;
-    else
-        linewide = [];
-    end
+    linewide = [];
+end
+
+[temp,TF] = find_after(G.plotspecs,'idth');
+if TF
+    linewide = str2double(temp);
 end
 
 % what color should the lines (1D) / graph edges (2D & 3D) be?
-l = length(G.plotspecs);
-s = strfind(G.plotspecs,'olor');
-while ~isempty(s) && s(end) > 3 && s(end)+5 < l && strcmp(G.plotspecs(s(end)-3:s(end)+6),'nocolorbar')
-    s(end) = [];
-end
-if ~isempty(s) && l > s(end)+3 && isstrprop(G.plotspecs(s(end)+4),'alpha') == 1
-    linecolor = G.plotspecs(s(end)+4);
-elseif G.dim == 1
+if G.dim == 1
     linecolor = 'b';
 else
     linecolor = 'k';
+end
+
+[temp,TF] = find_after(G.plotspecs,'olor','olorbar');
+if TF
+    linecolor = temp;
+else
+    [temp,TF] = find_between(G.plotspecs,'olor[',']');
+    if TF
+        linecolor = eval(sprintf('[%s]',temp));
+    end
 end
 
 % what color should the nodes be?
@@ -186,19 +159,7 @@ else
 end
 
 % other plot instructions?
-verbatim = false;
-verbstart = strfind(G.plotspecs,'verbatim{{');
-if ~isempty(verbstart)
-    verbstart = verbstart(1);
-    verbend = strfind(G.plotspecs(verbstart+10:end),'}}');
-    if ~isempty(verbend)
-        verbend = verbend(1)+verbstart+9;
-        verbtext = G.plotspecs(verbstart+10:verbend-1);
-        verbatim = true;
-    end
-else
-    verbtext = [];
-end
+[verbtext,verbatim] = find_between(G.plotspecs,'verbatim{{','}}');
 
 % sort the nodes?
 sortnodes = false;
@@ -213,31 +174,59 @@ end
 
 
 
-function [x1,x2] = bracket_comma_bracket(s)
-% Given a string s, return numbers x1 and x2 from s = '...[x1,x2]...'
+function [str,TF] = find_between(plotspecs,left,right)
+% Given a string 'plotspecs', return str, where <left>str<right>
 
-% the index of '['
-bracket1 = strfind(s,'[');
-bracket1 = bracket1(1);
+str = [];
+TF = false;
 
-% the index of ','
-comma = strfind(s,',');
-comma = comma(1);
-
-% the index of ']'
-bracket2 = strfind(s,']');
-bracket2 = bracket2(1);
-
-if bracket1 < comma && comma < bracket2
-    try
-        x1 = str2double(s(bracket1+1:comma-1));
-        x2 = str2double(s(comma+1:bracket2-1));
-    catch
-        x1 = [];
-        x2 = [];
+a = strfind(plotspecs,left);
+if ~isempty(a) && length(plotspecs) > a(end)+length(left)-1
+    plotspecs(1:a(end)+length(left)-1) = [];
+    b = strfind(plotspecs,right);
+    if ~isempty(b)
+        str = plotspecs(1:b(1)-1);
+        TF = true;
     end
-else
-    x1 = [];
-    x2 = [];
+end
+end
+
+
+
+
+function [y,TF] = find_after(plotspecs,left,mismatch)
+% Given a string 'plotspecs', return the number OR character after <left>,
+% but don't match 'left' with 'mismatch'
+
+y = [];
+TF = false;
+
+a = strfind(plotspecs,left);
+
+if ~isempty(a) && exist('mismatch','var')
+    a2 = strfind(plotspecs,mismatch);
+    a = setdiff(a,a2);
+end
+
+if ~isempty(a) && length(plotspecs) > a(end)+length(left)-1
+    if isstrprop(plotspecs(a(end)+length(left)),'alpha')
+        y = plotspecs(a(end)+length(left));
+        TF = true;
+    elseif isstrprop(plotspecs(a(end)+length(left)),'digit')
+        onedot = false;
+        b = a(end)+length(left);
+        while b < length(plotspecs)
+            if isstrprop(plotspecs(b+1),'digit')
+                b = b+1;
+            elseif strcmp(plotspecs(b+1),'.') && ~onedot
+                b = b+1;
+                onedot = true;
+            else
+                break
+            end
+        end
+        y = str2double(plotspecs(a(end)+length(left):b));
+        TF = true;
+    end
 end
 end

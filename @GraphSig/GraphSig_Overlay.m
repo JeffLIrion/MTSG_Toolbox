@@ -1,4 +1,4 @@
-function fig = GraphSig_Overlay(G1,G2,linewide1,ls1,linewide2,ls2)
+function fig = GraphSig_Overlay(G1,G2,linewide1,ls1,lc1,linewide2,ls2,lc2)
 % Display a plot of the data in GraphSig object G1 overlaid on the graph of
 % G2
 %
@@ -7,8 +7,10 @@ function fig = GraphSig_Overlay(G1,G2,linewide1,ls1,linewide2,ls2)
 %   G2          GraphSig object #2
 %   linewide1   the width of the edges for graph #1
 %   ls1         the LineSpec for the edges of graph #1
+%   lc1         the color of the edges of graph #1
 %   linewide2   the width of the edges for graph #2
 %   ls2         the LineSpec for the edges of graph #2
+%   lc2         the color of the edges of graph #2
 %
 % Output
 %    fig        a plot figure
@@ -53,10 +55,16 @@ if ~exist('linewide2','var')
     linewide2 = 1;
 end
 if ~exist('ls1','var')
-    ls1 = '-k';
+    ls1 = '-';
 end
 if ~exist('ls2','var')
-    ls2 = ':c';
+    ls2 = ':';
+end
+if ~exist('lc1','var')
+    lc1 = 'k';
+end
+if ~exist('lc2','var')
+    lc2 = 'c';
 end
 
 
@@ -71,9 +79,9 @@ end
 
 % plot the graph
 fig = figure('visible','on');
-gplot3(G2.W,G2.xy,ls2,'LineWidth',linewide2);
+gplot3(G2.W,G2.xy,'LineStyle',ls2,'Color',lc2,'LineWidth',linewide2);
 hold on
-gplot3(G1.W,G1.xy,ls1,'LineWidth',linewide1);
+gplot3(G1.W,G1.xy,'LineStyle',ls1,'Color',lc1,'LineWidth',linewide1);
 
 % determine the node sizes (if using variable sizes)
 if ~isscalar(ptsize)

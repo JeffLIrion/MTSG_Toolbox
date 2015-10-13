@@ -1,13 +1,13 @@
-function [X,Y,Z] = gplot3(W,xyz,lc,varargin)
+function [X,Y,Z] = gplot3(W,xyz,varargin)
 % A modification of gplot which can handle 2-D or 3-D graphs and allows
 % more customization of the resulting plot.  
 %
 % Input
 %   W           the weight matrix
 %   xyz         the matrix of xyz coordinates
-%   lc          a line specification that determines line style, marker
-%               symbol, and color of the plotted lines
-%   varargin    specifications such as the line width
+%   ls          a line specification that determines the line style
+%   lc          the color of the graph's edges
+%   varargin    specifications such as LineStyle, Color, LineWidth, etc.
 %
 % Output
 %   X           x-coordinates of the line segments
@@ -48,20 +48,25 @@ if cols == 3
 end
 
 if nargout == 0
-    % specify 'lc" if it is not given as an input
-    if ~exist('lc','var') || ~ischar(lc)
-        lc = '-k';
-    end
+% % %     % specify 'ls' if it is not given as an input
+% % %     if ~exist('ls','var')
+% % %         ls = '-';
+% % %     end
+% % %     
+% % %     % specify 'lc' if it is not given as an input
+% % %     if ~exist('lc','var')
+% % %         lc = 'k';
+% % %     end
     
     % plot the graph
     if cols ==2
-        h = plot(X,Y,lc);
+        h = plot(X,Y);%,ls,'Color',lc);
     elseif cols == 3
-        h = plot3(X(:),Y(:),Z(:),lc);
+        h = plot3(X(:),Y(:),Z(:));%,ls,'Color',lc);
     end
     
     % customize the plot
-    for k=1:nargin-3
+    for k=1:nargin-2
         s = varargin{k};
         try
             set(h,s,varargin{k+1});

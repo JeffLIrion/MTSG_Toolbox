@@ -55,11 +55,9 @@ set(0, 'DefaultFigureVisible', 'on');
 if G.dim == 1
     fig = figure('visible','on');
     if G.length < 65 || stemplot
-        ls = strcat('-',linecolor,'o');
-        stem(G.xy, G.f, ls,'LineWidth',2,'MarkerFaceColor',linecolor,'MarkerSize',ptsize(1));
+        stem(G.xy, G.f, '-o','LineWidth',2,'Color',linecolor,'MarkerFaceColor',linecolor,'MarkerSize',ptsize(1));
     else
-        ls = strcat('-',linecolor);
-        plot(G.xy, G.f, ls,'LineWidth',linewide);
+        plot(G.xy, G.f, '-','Color',linecolor,'LineWidth',linewide);
     end
 
     xmin = min(G.xy);
@@ -112,8 +110,6 @@ if G.dim == 1
 
 else
     
-    ls = strcat('-',linecolor);
-    
     fig = figure('visible','on');
     
     if sortnodes
@@ -125,9 +121,9 @@ else
     
     % plot the graph
     if isempty(linewide)
-        gplot3(G.W,G.xy,ls);
+        gplot3(G.W,G.xy,'LineStyle','-','Color',linecolor);
     else
-        gplot3(G.W,G.xy,ls,'LineWidth',linewide);
+        gplot3(G.W,G.xy,'LineStyle','-','Color',linecolor,'LineWidth',linewide);
     end
     hold on
     
