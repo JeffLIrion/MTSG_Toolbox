@@ -92,20 +92,10 @@ end
 
 % label the y-axis
 ylabel('Level (j)');
-ax = gca;
 ylim([0,jmax-1]);
 if nargin == 1
-    yticklabels = cellstr(int2str((jmax-1:-1:0)'));
-else
-    yticklabels = cellstr(int2str((0:jmax-1)'));
-end
-
-if verLessThan('matlab', '8.4')
-    set(ax,'YTick',0:jmax);
-    set(ax,'YTickLabel',yticklabels)
-else
-    ax.YTick = 0:jmax;
-    ax.YTickLabel = yticklabels;
+    y = get(gca,'YTickLabel');
+    set(gca,'YTickLabel',y(end:-1:1,:));
 end
 
 set(gcf,'color','w');

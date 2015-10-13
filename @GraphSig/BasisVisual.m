@@ -60,6 +60,8 @@ end
 if BSc2f
     title('Coefficients of the Specified Basis');
 else
+    y = get(gca,'YTickLabel');
+    set(gca,'YTickLabel',y(end:-1:1,:));
     title('Coefficients of the Specified Basis (Fine-To-Coarse Dictionary)');
 end
 
