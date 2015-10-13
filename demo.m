@@ -45,7 +45,7 @@ p = 0.1;
 [~,GVis] = HGLET_BasisVisual(G,GP,BS);
 GVis = EditName(GVis,'Selected HGLET Best Basis');
 GVis = EditPlotSpecs(GVis,'red',1);
-GraphSig_Overlay(GVis,G,2,'-k',1,'-c');
+GraphSig_Overlay(GVis,G,2,'-','k',1,'-','c');
 pause
 
 
