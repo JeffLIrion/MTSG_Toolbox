@@ -72,6 +72,18 @@ G1d = GHWT_BasisVector(G,GP,rs(8,4)+3,4);
 
 
 
+%%% FIGURE 2
+G6 = Gpath(6);
+GP6 = PartitionTreeFiedler(G6);
+Display_GHWT_Basis_Vectors_c2f(G6,GP6);
+
+
+
+%%% FIGURE 3
+Display_GHWT_Basis_Vectors_f2c(G6,GP6);
+
+
+
 %%% FIGURE 4
 
 % add noise to the mutilated Gaussian
@@ -112,4 +124,4 @@ G4d = EditPlotSpecs(G4d,sprintf('notitle CLim[%f,%f]',cmin,cmax));
 
 
 % clear unnecessary variables
-clear rs dmatrix dvec dvecT kept cmin cmax
+clear rs dmatrix dvec dvecT kept cmin cmax clear G6 clear GP6
