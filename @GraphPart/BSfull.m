@@ -24,11 +24,7 @@ function [levlistfull,levlengthsfull,transfull] = BSfull(GP,BS,trans)
 %% 0. Preliminaries
 
 % extract data
-[levlist,levlengths] = ExtractData(BS);
-if isempty(levlengths)
-    BS = levlist2levlengths(GP,BS);
-    [levlist,levlengths] = ExtractData(BS);
-end
+[levlist,levlengths] = ExtractData(BS,GP);
 
 % allocate space
 N = length(GP.ind);

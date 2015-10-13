@@ -29,12 +29,7 @@ if exist('BS','var')
     % allocate space
     dvec = zeros(N,fcols);
 
-    [levlist,levlengths,BSc2f] = ExtractData(BS);
-
-    % compute levlengths if it is not included in BS
-    if length(levlist) ~= length(levlengths)
-        levlengths = levlist2levlengths(levlist,GP);
-    end
+    [levlist,levlengths,BSc2f] = ExtractData(BS,GP);
     
     % put dmatrix in the fine-to-coarse arrangement, if necessary
     if ~BSc2f

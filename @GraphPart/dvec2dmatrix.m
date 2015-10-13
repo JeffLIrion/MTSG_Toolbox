@@ -20,13 +20,7 @@ function dmatrix = dvec2dmatrix(dvec,GP,BS)
 %% 0. Preliminaries
 
 % extract data
-[levlist,levlengths] = ExtractData(BS);
-
-% compute levlengths if it is not included in BS
-if length(levlist) ~= length(levlengths)
-    BS = levlist2levlengths(GP,BS);
-    [~,levlengths] = ExtractData(BS);
-end
+[levlist,levlengths] = ExtractData(BS,GP);
 
 % constants
 [N,jmax] = size(GP.rs);
