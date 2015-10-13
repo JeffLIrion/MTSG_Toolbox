@@ -52,6 +52,17 @@ for j = 1:jmax
         [dvec,BS] = dmatrix2dvec(dmatrix,GP);
         [~,Gout] = HGLET_Synthesis(dvec,GP,BS,G);
         
+        % 1-D case: specify the color of the nodes
+        if dim == 1
+            if l == 0
+                Gout = EditPlotSpecs(Gout,'linecolork',1);
+            elseif l == 1
+                Gout = EditPlotSpecs(Gout,'linecolorr',1);
+            else
+                Gout = EditPlotSpecs(Gout,'linecolorb',1);
+            end
+        end
+        
         % plot the basis vector
         s1 = subplot(jmax,N,N*(j-1)+row);
         axis equal;
