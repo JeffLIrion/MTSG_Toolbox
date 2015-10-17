@@ -30,7 +30,12 @@ N = N-1;
 
 %% 1. The table of specified coefficients
 
-dtable = zeros(jmax,N);
+if exist('dvec','var')
+    dtable = -max(abs(dvec))*ones(jmax,N)/63;
+else
+    dtable = zeros(jmax,N);
+end
+
 indr0 = 1;
 for row = 1:length(levlist)
     indr = indr0:indr0+levlengths(row)-1;
@@ -43,20 +48,22 @@ for row = 1:length(levlist)
 end
 
 % display the table of specified coefficients
+figure;
+imagesc(dtable);
 if exist('dvec','var')
-    dtable(dtable == 0) = -max(max(dtable))/63;
-    imagesc(dtable);
     cmap = colormap;
     cmap(1,:) = 1;
     colormap(cmap);
     colorbar;
 else
-    imagesc(dtable);
     cmap = ones(64,3);
     cmap(end,:) = [0, 0, 0.5];
     colormap(cmap);
 end
 
+% labeling
+xlabel('Coefficient Index');
+ylabel('Level (j)');
 if BSc2f
     title('Coefficients of the Specified Basis');
 else
@@ -64,6 +71,8 @@ else
     set(gca,'YTickLabel',y(end:-1:1,:));
     title('Coefficients of the Specified Basis (Fine-To-Coarse Dictionary)');
 end
+
+set(gcf,'color','w');
 
 
 %% 2. The GraphSig object for GraphSig_Overlay (coarse-to-fine only)

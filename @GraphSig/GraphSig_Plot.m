@@ -209,22 +209,5 @@ set(gcf,'color','w');
 
 set(gca, 'FontSize',10);
 
-% set(gcf, 'PaperPositionMode', 'manual');
-% set(gcf, 'PaperUnits', 'inches');
-% set(gcf, 'PaperPosition', [0.01 0.01 4.77 3.91]);
-% set(gcf, 'PaperSize', [4.78 3.92]);
-% set(gca, 'FontSize',10);
-
-% set(gcf, 'PaperPositionMode', 'manual');
-% set(gcf, 'PaperUnits', 'inches');
-% set(gcf, 'PaperSize', [5 5]);
-% set(gcf, 'PaperPosition', [0 0 5 5]);
-
-
-% if G.dim == 2
-%     annotation(fig,'rectangle',[0.08 0.05 0.83 0.89],'LineWidth',0.1,'FaceColor','flat','EdgeColor','w');
-% end
-
-
 
 end
