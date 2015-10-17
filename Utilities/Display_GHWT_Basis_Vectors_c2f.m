@@ -85,6 +85,10 @@ for j = 1:jmax
     end
 end
 
+
+if dim ~= 1
+    colormap('jet');
+end
 set(gcf,'color','w');
 
 

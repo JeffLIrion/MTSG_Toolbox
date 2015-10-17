@@ -190,6 +190,10 @@ else
         % copper?
         elseif copperbar
             colormap('copper');
+            
+        % default?
+        else
+            colormap('jet');
         end
     end
 

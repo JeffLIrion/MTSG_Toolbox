@@ -98,6 +98,7 @@ if nargin == 1
     set(gca,'YTickLabel',y(end:-1:1,:));
 end
 
+colormap('jet');
 set(gcf,'color','w');
 
 

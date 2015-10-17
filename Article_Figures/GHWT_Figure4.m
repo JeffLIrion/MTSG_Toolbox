@@ -115,4 +115,5 @@ copyobj(fig1,s1);
 close(h1);
 
 
+colormap('jet')
 set(gcf,'color','w');

@@ -140,6 +140,10 @@ elseif graybar
 % copper?
 elseif copperbar
     colormap('copper');
+    
+% default?
+else
+    colormap('jet');
 end
 
 % custom dynamic display range?

@@ -51,6 +51,7 @@ end
 figure;
 imagesc(dtable);
 if exist('dvec','var')
+    colormap('jet');
     cmap = colormap;
     cmap(1,:) = 1;
     colormap(cmap);
