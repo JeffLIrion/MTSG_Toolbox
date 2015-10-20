@@ -1,4 +1,4 @@
-%  MTSG_Path -- initialize Matlab's path to include MTSG_Toolbox
+%  Initialize Matlab's path to include MTSG_Toolbox
 %
 %
 %
@@ -14,8 +14,7 @@ fprintf('\nWelcome to the MTSG Toolbox v %g\n\n', MTSGVERSION);
 
 
 % identify the type of computer and declare MTSGPATH accordingly
-Friend = computer;
-if isunix || strcmp(Friend(1:2),'PC')
+if isunix || ispc
     MTSGPATH = [fileparts(mfilename('fullpath')),filesep];
 else
     fprintf('\n\nI don''t recognize this computer.\nPathnames not set.\n\nSolution: edit MTSG_Path.m\n\n');
@@ -39,4 +38,4 @@ addpath(mtsgp);
 
 
 % clear variables
-clear MTSGVERSION Friend MTSGPATH V mtsgp
+clear MTSGVERSION MTSGPATH V mtsgp
