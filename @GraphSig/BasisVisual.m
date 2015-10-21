@@ -62,14 +62,16 @@ else
     colormap(cmap);
 end
 
-% labeling
+% labeling & formatting
 xlabel('Coefficient Index');
 ylabel('Level (j)');
+ylim([0.5,jmax+0.5]);
+y = get(gca,'YTickLabel');
 if BSc2f
     title('Coefficients of the Specified Basis');
+    set(gca,'YTickLabel',str2num(y)-1);
 else
-    y = get(gca,'YTickLabel');
-    set(gca,'YTickLabel',y(end:-1:1,:));
+    set(gca,'YTickLabel',jmax-str2num(y));
     title('Coefficients of the Specified Basis (Fine-To-Coarse Dictionary)');
 end
 
