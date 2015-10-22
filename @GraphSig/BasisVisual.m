@@ -67,11 +67,16 @@ xlabel('Coefficient Index');
 ylabel('Level (j)');
 ylim([0.5,jmax+0.5]);
 y = get(gca,'YTickLabel');
+if iscell(y)
+    y = str2num(char(y));
+else
+    y = str2num(y);
+end
 if BSc2f
     title('Coefficients of the Specified Basis');
-    set(gca,'YTickLabel',str2num(y)-1);
+    set(gca,'YTickLabel',y-1);
 else
-    set(gca,'YTickLabel',jmax-str2num(y));
+    set(gca,'YTickLabel',jmax-y);
     title('Coefficients of the Specified Basis (Fine-To-Coarse Dictionary)');
 end
 
