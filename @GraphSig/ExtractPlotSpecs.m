@@ -82,8 +82,15 @@ if CLim
     cmin = temp(1);
     cmax = temp(2);
 else
-    cmin = [];
-    cmax = [];
+    [temp,CLim] = find_between(G.plotspecs,'CLim([','])');
+    if CLim
+        temp = eval(sprintf('[%s]',temp));
+        cmin = temp(1);
+        cmax = temp(2);
+    else
+        cmin = [];
+        cmax = [];
+    end
 end
 
 % how big should the points be?
