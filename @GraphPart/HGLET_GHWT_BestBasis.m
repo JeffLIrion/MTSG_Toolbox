@@ -43,7 +43,7 @@ transH    = [false,false];
 if ~exist('costfun','var')
     costfun = [];
 end
-[costfun,useMDL] = cost_functional(costfun);
+costfun = cost_functional(costfun);
 
 % constants and dmatrix cleanup
 if isarray(dmatrixHsym)
@@ -86,44 +86,6 @@ if fcols > 1
     end
 end
 
-% MDL stuff
-if useMDL
-    % compute the number of bits needed to store trans entries
-    trans_cost = ceil(log2( isarray(dmatrixHsym) + isarray(dmatrixG) ...
-        + isarray(dmatrixHrw) + isarray(dmatrixH)));
-    
-    % compute the number of bits needed to store levlist entries
-    levlist_cost = 0*ceil(log2(jmax));
-    
-    % compute the number of bits needed to store levlengths entries
-    % (equivalently, to store regionstarts entries)
-    levlens_cost = ceil(log2(N));
-    
-    kmin = 1;
-    kmax = 1 + ceil(0.5*log2(N));
-    
-    % define the cost functional
-    costfun = @(x) MDL(x,kmin,kmax,levlist_cost,levlens_cost,trans_cost);
-    
-    % normalize the coefficients
-    if isarray(dmatrixHsym)
-        dnorm = norm(dmatrixHsym(:,end),2)/sqrt(N);
-        dmatrixHsym = dmatrixHsym/dnorm;
-    end
-    if isarray(dmatrixG)
-        dnorm = norm(dmatrixG(:,end),2)/sqrt(N);
-        dmatrixG = dmatrixG/dnorm;
-    end
-    if isarray(dmatrixHrw)
-        dnorm = norm(dmatrixHrw(:,end),2)/sqrt(N);
-        dmatrixHrw = dmatrixHrw/dnorm;
-    end
-    if isarray(dmatrixH)
-        dnorm = norm(dmatrixH(:,end),2)/sqrt(N);
-        dmatrixH = dmatrixH/dnorm;
-    end
-end
-
 
 %% Find the HGLET/GHWT best-basis
 
@@ -146,14 +108,6 @@ if isarray(dmatrixH)
 end
 levlist = jmax*ones(N,1,'uint8');
 
-% allocate a vector to store MDL costs
-costs = zeros(N,1);
-if useMDL
-    for row = 1:N
-        costs(row) = costfun(dvec(row));
-    end
-end
-
 % set the tolerance
 tol = 10^4*eps;
 
@@ -163,18 +117,14 @@ for j = jmax-1:-1:1
     for r = 1:regioncount
         indr = GP.rs(r,j):GP.rs(r+1,j)-1;
         %%%%% compute the cost of the current best basis
-        if useMDL
-            costBB = sum(costs(indr));
-        else
-            costBB = costfun(dvec(indr));
-        end
+        costBB = costfun(dvec(indr));
             
         %%%%% compute the cost of the HGLET-Lsym coefficients
         if isarray(dmatrixHsym)
             costNEW = costfun( dmatrixHsym(indr,j) );
             % change the best basis if the new cost is less expensive
             if costBB >= costNEW - tol
-                [costBB, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(costNEW,dmatrixHsym(indr,j),j,transHsym);
+                [costBB, dvec(indr), levlist(indr), trans(indr,:)] = BBchange(costNEW,dmatrixHsym(indr,j),j,transHsym);
             end
         end
         
@@ -183,7 +133,7 @@ for j = jmax-1:-1:1
             costNEW = costfun( dmatrixG(indr,j) );
             % change the best basis if the new cost is less expensive
             if costBB >= costNEW - tol
-                [costBB, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(costNEW,dmatrixG(indr,j),j,transG);
+                [costBB, dvec(indr), levlist(indr), trans(indr,:)] = BBchange(costNEW,dmatrixG(indr,j),j,transG);
             end
         end
         
@@ -192,7 +142,7 @@ for j = jmax-1:-1:1
             costNEW = costfun( dmatrixHrw(indr,j) );
             % change the best basis if the new cost is less expensive
             if costBB >= costNEW - tol
-                [costBB, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(costNEW,dmatrixHrw(indr,j),j,transHrw);
+                [costBB, dvec(indr), levlist(indr), trans(indr,:)] = BBchange(costNEW,dmatrixHrw(indr,j),j,transHrw);
             end
         end
         
@@ -201,7 +151,7 @@ for j = jmax-1:-1:1
             costNEW = costfun( dmatrixH(indr,j) );
             % change the best basis if the new cost is less expensive
             if costBB >= costNEW - tol
-                [~, dvec(indr), levlist(indr), trans(indr,:), costs(indr)] = BBchange(costNEW,dmatrixH(indr,j),j,transH);
+                [~, dvec(indr), levlist(indr), trans(indr,:)] = BBchange(costNEW,dmatrixH(indr,j),j,transH);
             end
         end
     end
@@ -213,12 +163,6 @@ levlist( levlist==0 ) = [];
 
 BS = BasisSpec(levlist,[],true,'HGLET-GHWT Best Basis');
 BS = levlist2levlengths(GP,BS);
-
-
-% if using MDL, rescale the coefficients
-if useMDL && fcols == 1
-    dvec = dvec*dnorm;
-end
 
 
 % if we flattened dmatrix, then "unflatten" the expansion coefficients
@@ -257,7 +201,7 @@ end
 
 
 
-function [costBB, dvec, levlist, trans, costs] = BBchange(costNEW, dvec, j, trans)
+function [costBB, dvec, levlist, trans] = BBchange(costNEW, dvec, j, trans)
 % Change to the new best basis
 
 costBB = costNEW;
@@ -268,7 +212,4 @@ levlist = zeros(n,1,'uint8');
 levlist(1) = j;
 
 trans = repmat(trans,n,1);
-
-costs = zeros(n,1);
-costs(1) = costNEW;
 end
