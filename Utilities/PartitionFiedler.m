@@ -130,34 +130,36 @@ end
 %% TROUBLESHOOTING
 if sum(pm < 0) == 0 || sum(pm > 0) == 0 || sum(abs(pm)) < N
 
-    % Case 1: it is not connected
-    if ~exist('val','var')
-        val = v'*(diag(sum(W))-W)*v;
-    end
-    if val < tol
-        pm = 2*(abs(v) > tol) - 1;
-        while sum(pm < 0) == 0 || sum(pm > 0) == 0
-            tol = 10*tol;
-            pm = 2*(abs(v) > tol) - 1;
-            if tol > 1
-                pm(1:ceil(N/2)) = 1;
-                pm(ceil(N/2)+1:N) = -1;
-            end
+    if isarray(W)
+        % Case 1: it is not connected
+        if ~exist('val','var')
+            val = v'*(diag(sum(W))-W)*v;
         end
+        if val < tol
+            pm = 2*(abs(v) > tol) - 1;
+            while sum(pm < 0) == 0 || sum(pm > 0) == 0
+                tol = 10*tol;
+                pm = 2*(abs(v) > tol) - 1;
+                if tol > 1
+                    pm(1:ceil(N/2)) = 1;
+                    pm(ceil(N/2)+1:N) = -1;
+                end
+            end
 
-    % Case 2: it is connected
-    else
-        pm = 2*(v >= mean(v)) - 1;
+        % Case 2: it is connected
+        else
+            pm = 2*(v >= mean(v)) - 1;
 
-        if sum(abs(pm)) < N
-            % assign the near-zero points based on the values of v at their
-            % neighbor nodes
-            pm0 = (1:N)';
-            pm0 = pm0(pm == 0);
-            pm(pm0) = (W(pm0,:)*v > tol) - (W(pm0,:)*v < -tol);
+            if sum(abs(pm)) < N
+                % assign the near-zero points based on the values of v at their
+                % neighbor nodes
+                pm0 = (1:N)';
+                pm0 = pm0(pm == 0);
+                pm(pm0) = (W(pm0,:)*v > tol) - (W(pm0,:)*v < -tol);
 
-            % assign any remaining zeros to the group with fewer members
-            pm(pm == 0) = (sum(pm > 0) - sum(pm < 0)) >= 0;
+                % assign any remaining zeros to the group with fewer members
+                pm(pm == 0) = (sum(pm > 0) - sum(pm < 0)) >= 0;
+            end
         end
     end
 
