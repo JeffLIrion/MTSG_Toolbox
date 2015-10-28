@@ -1,12 +1,10 @@
-function [pm,v] = PartitionFiedler(W,~,v,val)
-% Given a weight matrix 'W', generate a Laplacian matrix and partition it 
-% according to the Fiedler vector.  
+function [pm,v] = PartitionFiedler(W,~,v)
+% Partition the vertices of a graph according to the Fiedler vector
 %
 % Inputs
 %   W           the edge weight matrix
 %   ~           if a 2nd input argument is given, use L_rw
 %   v           the Fiedler vector
-%   val         lambda_1
 %
 % Outputs
 %   pm          a vector of 1's and -1's
@@ -20,6 +18,23 @@ function [pm,v] = PartitionFiedler(W,~,v,val)
 
 
 
+%% Easy case: the Fiedler vector is provided
+
+if exist('v','var')
+    % partition using the Fiedler vector and troubleshoot any potential issues
+    [pm,v] = PartitionFiedler_pm(v);
+    
+    if length(W) == length(v)
+        val = v'*(diag(sum(W))-W)*v;
+        pm = PartitionFiedler_troubleshooting(pm,v,W,val);
+    else
+        pm = PartitionFiedler_troubleshooting(pm);
+    end
+    
+    return
+end
+
+    
 %% Preliminaries
 
 N = length(W);
@@ -96,14 +111,25 @@ elseif nargin == 2
 end
 
 
-%% Partitioning based on the Fiedler vector
+% partition using the Fiedler vector and troubleshoot any potential issues
+[pm,v] = PartitionFiedler_pm(v);
+pm = PartitionFiedler_troubleshooting(pm,v,W,val);
+
+
+end
+
+
+
+
+function [pm,v] = PartitionFiedler_pm(v)
+% Partition based on the Fiedler vector 'v'
 
 % define a tolerance
 tol = 10^3*eps;
 
 % set the first nonzero element to be positive
 row = 1;
-while abs(v(row)) < tol && row < N
+while abs(v(row)) < tol && row < length(v)
     row = row + 1;
 end
 
@@ -111,9 +137,8 @@ if v(row) < 0
     v = -v;
 end
 
-% assign each point to either region 1 or region -1 in such a way that
-% neither region is empty
-
+% assign each point to either region 1 or region -1, and assign any zero
+% entries to the smaller region
 if sum(v >= tol) > sum(v <= -tol) % more (+) than (-) entries
     pm = 2*(v >= tol) - 1;
 else
@@ -124,17 +149,20 @@ end
 if pm(1) < 0
     pm = -pm;
 end
-    
+end
 
 
-%% TROUBLESHOOTING
+
+
+function pm = PartitionFiedler_troubleshooting(pm,v,W,val)
+% Troubleshoot potential issues with the partitioning
+
+N = length(pm);
+tol = 10^3*eps;
+
 if sum(pm < 0) == 0 || sum(pm > 0) == 0 || sum(abs(pm)) < N
-
-    if isarray(W)
+    if nargin == 4
         % Case 1: it is not connected
-        if ~exist('val','var')
-            val = v'*(diag(sum(W))-W)*v;
-        end
         if val < tol
             pm = 2*(abs(v) > tol) - 1;
             while sum(pm < 0) == 0 || sum(pm > 0) == 0
@@ -167,23 +195,11 @@ if sum(pm < 0) == 0 || sum(pm > 0) == 0 || sum(abs(pm)) < N
     if sum(pm < 0) == 0 || sum(pm > 0) == 0
         pm(1:ceil(N/2)) = 1;
         pm(ceil(N/2)+1:N) = -1;
-    end
-    
-end
-
-
-%% Wrap-up
-
-% make sure that the 1 region has more points than the -1 region
-if sum(pm < 0) > sum(pm > 0)
-    pm = -pm;
-    v = -v;
+    end    
 end
 
 % make sure that the first point is assigned as a 1
 if pm(1) < 0
     pm = -pm;
 end
-
-
 end
