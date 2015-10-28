@@ -66,7 +66,7 @@ if nargin == 1 || min(sum(W)) < 10^3*eps
     
     
 %% L_rw
-elseif nargin == 2 || nargin == 3
+elseif nargin == 2
     if N > cutoff
         opts.issym = 1;
         opts.v0 = ones(N,1)/sqrt(N);
@@ -131,6 +131,9 @@ end
 if sum(pm < 0) == 0 || sum(pm > 0) == 0 || sum(abs(pm)) < N
 
     % Case 1: it is not connected
+    if ~exist('val','var')
+        val = v'*(diag(sum(W))-W)*v;
+    end
     if val < tol
         pm = 2*(abs(v) > tol) - 1;
         while sum(pm < 0) == 0 || sum(pm > 0) == 0
