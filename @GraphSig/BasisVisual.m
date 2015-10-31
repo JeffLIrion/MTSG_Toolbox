@@ -85,7 +85,7 @@ set(gcf,'color','w');
 
 %% 2. The GraphSig object for GraphSig_Overlay (coarse-to-fine only)
 
-if BSc2f
+if BSc2f && G.dim > 0 && G.dim < 4
     G_regions = G;
     G_regions.W = sparse(N,N);
 
