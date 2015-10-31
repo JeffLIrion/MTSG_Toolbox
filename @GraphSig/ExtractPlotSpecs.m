@@ -119,7 +119,7 @@ end
 
 [temp,TF] = find_after(G.plotspecs,'idth');
 if TF
-    linewide = str2double(temp);
+    linewide = temp;
 end
 
 % what color should the lines (1D) / graph edges (2D & 3D) be?
