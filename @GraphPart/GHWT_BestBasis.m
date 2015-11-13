@@ -125,6 +125,10 @@ end
 % if we flattened dmatrix, then "unflatten" the expansion coefficients
 if fcols > 1
     dvec = dmatrix2dvec(dmatrix0,GP,BS);
+    if nargout > 2
+        dvecc2f = dmatrix2dvec(dmatrix0,GP,BSc2f);
+        dvecf2c = dmatrix2dvec(dmatrix0,GP,BSf2c);
+    end
 end
 
 
