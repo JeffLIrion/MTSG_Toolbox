@@ -30,7 +30,13 @@ N = N-1;
 sslac = tag_class(jmax);
 tag = zeros(N,jmax,sslac);
 
-% allocate space for compinfo
+% allocate space for compinfo (used for synthesis from fine-to-coarse
+% dictionary)
+%       if tag == 0 && n == 1:                              compinfo = 0
+%       if tag == 0 && n >= 2:                              compinfo = n1
+%       if tag == 1:                                        compinfo = n2
+%       if tag >= 2 && coeff is formed from 2 coeffs:       compinfo = 1
+%       if tag >= 2 && coeff is formed from 1 coeff:        compinfo = 0
 compinfo = zeros(N,jmax,class(GP.rs));
 
 
