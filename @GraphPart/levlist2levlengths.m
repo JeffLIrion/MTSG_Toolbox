@@ -48,7 +48,7 @@ else
     end
     
     for row = 1:length(levlist)
-        IX = find( GP.rsf2c(:,levlist(row))==n+1 );
+        IX = find( GP.rsf2c(:,levlist(row))==n+1, 1, 'last' );
         levlengths(row) = GP.rsf2c(IX+1,levlist(row))-GP.rsf2c(IX,levlist(row));
         n = n+levlengths(row);
     end

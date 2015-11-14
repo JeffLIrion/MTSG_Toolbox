@@ -69,7 +69,7 @@ if exist('dmatrix','var')
                 if rs2 == rs3
                     dmatrix(rs1:rs3-1,j,:) = dmatrix(rs1:rs3-1,j+1,:);
                     tag(rs1:rs3-1,j) = tag(rs1:rs3-1,j+1);
-                    compinfo(rs1:rs3-1,j) = compinfo(rs1:rs3-1,j+1);
+% % %                     compinfo(rs1:rs3-1,j) = compinfo(rs1:rs3-1,j+1);
                     
                 % the parent region has 2 child regions
                 else

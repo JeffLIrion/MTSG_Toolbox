@@ -153,11 +153,11 @@ else
                     
                     % the parent region is a copy of the subregion
                     if rs2 == rs3
-                        dmatrix(rs1:rs3-1,j+1,:) = dmatrix(rs1:rs3-1,j,:);
+%                         dmatrix(rs1:rs3-1,j+1,:) = dmatrix(rs1:rs3-1,j,:);
                     
                     % the parent region has 2 child regions
                     else
-                        % the current coefficient in the parent region with which we  are dealing
+                        % the current coefficient in the parent region with which we are dealing
                         parent = rs1;
 
                         % the current coefficients in the child regions with which we are dealing
