@@ -66,17 +66,25 @@ end
 xlabel('Coefficient Index');
 ylabel('Level (j)');
 ylim([0.5,jmax+0.5]);
-y = get(gca,'YTickLabel');
-if iscell(y)
-    y = str2num(char(y));
+
+% the tick marks
+YT = get(gca,'YTick');
+YT = unique([0,round(YT)]);
+YT(YT < 1 | YT > jmax) = [];
+set(gca,'YTick',YT);
+
+% the tick mark labels
+YTL = get(gca,'YTickLabel');
+if iscell(YTL)
+    YTL = str2num(char(YTL));
 else
-    y = str2num(y);
+    YTL = str2num(YTL);
 end
 if BSc2f
     title('Coefficients of the Specified Basis');
-    set(gca,'YTickLabel',y-1);
+    set(gca,'YTickLabel',YTL-1);
 else
-    set(gca,'YTickLabel',jmax-y);
+    set(gca,'YTickLabel',jmax-YTL);
     title('Coefficients of the Specified Basis (Fine-To-Coarse Dictionary)');
 end
 
@@ -106,6 +114,12 @@ if BSc2f && G.dim > 0 && G.dim < 4
     G_regions = EditName(G_regions,'Regions of the Specified Basis');
     G_regions = EditPlotSpecs(G_regions,sprintf(' CLim[%d,%d]',0,jmax-1),1);
     GraphSig_Overlay(G_regions,G,1,'-','k',1,'-',[1 102/255 178/255]);
+    
+    % the colorbar tick marks
+    YTC = get(colorbar,'YTick');
+    YTC = unique(round([0,YTC]));
+    YTC( YTC < 0 | YTC > jmax-1) = [];
+    set(colorbar,'YTick',YTC);
 else
     G_regions = [];
 end
