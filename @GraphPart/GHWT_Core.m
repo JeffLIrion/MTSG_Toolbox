@@ -69,7 +69,6 @@ if exist('dmatrix','var')
                 if rs2 == rs3
                     dmatrix(rs1:rs3-1,j,:) = dmatrix(rs1:rs3-1,j+1,:);
                     tag(rs1:rs3-1,j) = tag(rs1:rs3-1,j+1);
-% % %                     compinfo(rs1:rs3-1,j) = compinfo(rs1:rs3-1,j+1);
                     
                 % the parent region has 2 child regions
                 else
@@ -151,7 +150,7 @@ else
             if n > 1
                 % the index that marks the start of the second subregion
                 rs2 = rs1+1;
-                while rs2 < rs3 && tag(rs2, j+1) ~= 0%%% && rs2 < N+1
+                while rs2 < rs3 && tag(rs2, j+1) ~= 0
                     rs2 = rs2+1;
                 end
                 
