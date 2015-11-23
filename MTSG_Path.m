@@ -16,11 +16,11 @@ MTSGVERSION = 001;
 MTSGPATH = [fileparts(mfilename('fullpath')),filesep];
 
 
-% generate the path string ==> includes the folder and multiple levels of subfolders below it
+% get MATLAB version info
 V = version('-date');
 V = str2double(V(end-3:end));
 
-% make sure the Matlab version is 6.x or above
+% generate the path string ==> includes the folder and multiple levels of subfolders below it
 if V < 2006
     fprintf('Warning: This version is only supported on Matlab 6.x or above');
     mtsgp=genpath(MTSGPATH,1);
