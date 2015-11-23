@@ -66,8 +66,12 @@ if ~exist([Datasets_dir,'Blocks.mat'],'file') || ~exist([Datasets_dir,'Blocks_No
         urlwrite('ftp://ftp.sas.com/pub/neural/data/dojo_medium.txt',dojo_medium);
         urlwrite('ftp://ftp.sas.com/pub/neural/data/dojo_test.txt',dojo_test);
     else
-        websave(dojo_medium,'ftp://ftp.sas.com/pub/neural/data/dojo_medium.txt');
-        websave(dojo_test,'ftp://ftp.sas.com/pub/neural/data/dojo_test.txt');
+        ftpobj = ftp('ftp.sas.com');
+        cd(ftpobj,'pub/neural/data');
+        mget(ftpobj,'dojo_medium.txt',raw_data_dir);
+        mget(ftpobj,'dojo_test.txt',raw_data_dir);
+        close(ftpobj);
+        clear ftpobj
     end
 
 
