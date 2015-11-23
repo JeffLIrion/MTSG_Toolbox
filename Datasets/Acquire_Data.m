@@ -13,7 +13,7 @@ if ~exist([Datasets_dir,'Msignal.mat'],'file') || ~exist([Datasets_dir,'PieceReg
     if exist('WavePath.m','file')
         WavePath;
         fprintf('\n\n\n\n\n\n\n\n\n\n');
-        fprintf('\n\n\n''Msignal'' and ''Piece-Regular'' were generated using WaveLab (http://statweb.stanford.edu/~wavelab/)\n\n\n');
+        fprintf('\n\n\n''Msignal'' and ''Piece-Regular'' were generated using WaveLab (<a href="http://statweb.stanford.edu/~wavelab/">http://statweb.stanford.edu/~wavelab/</a>)\n\n\n');
         readme = 'Generated using code from WaveLab (http://statweb.stanford.edu/~wavelab/)';
         
         % Msignal
@@ -32,7 +32,7 @@ if ~exist([Datasets_dir,'Msignal.mat'],'file') || ~exist([Datasets_dir,'PieceReg
         G = EditName(G,'Piece-Regular (N = 1021, SNR = 20.00 dB)');
         save([Datasets_dir,'PieceRegular_SNR20.mat'],'G','readme');
     else
-        fprintf('\n\n\nPlease install WaveLab if you would like to reproduce the ''Msignal'' and ''Piece-Regular'' signals.\n\nhttp://statweb.stanford.edu/~wavelab/\n\n\n');
+        fprintf('\n\n\nPlease install WaveLab if you would like to reproduce the ''Msignal'' and ''Piece-Regular'' signals.\n\n<a href="http://statweb.stanford.edu/~wavelab/">http://statweb.stanford.edu/~wavelab/</a>\n\n\n');
     end
 end
 
@@ -41,7 +41,7 @@ end
 
 %% Barbara
 if ~exist([Datasets_dir,'barbara.png'],'file')
-    fprintf('\n\n\n''Barbara'' image retrieved from http://www.io.csic.es/PagsPers/JPortilla/component/content/article/46-bls-gsm/63-test-images\n\n\n');
+    fprintf('\n\n\n''Barbara'' image retrieved from <a href="http://www.io.csic.es/PagsPers/JPortilla/component/content/article/46-bls-gsm/63-test-images">http://www.io.csic.es/PagsPers/JPortilla/component/content/article/46-bls-gsm/63-test-images</a>\n\n\n');
     
     barbara_png = [Datasets_dir,'barbara.png'];
     if verLessThan('matlab', '8.4')
@@ -57,7 +57,7 @@ end
 %% Blocks & Noisy Blocks
 if ~exist([Datasets_dir,'Blocks.mat'],'file') || ~exist([Datasets_dir,'Blocks_Noisy.mat'],'file')
     url = 'ftp://ftp.sas.com/pub/neural/dojo/dojo.html';
-    fprintf('\n\n\n''Blocks'' and ''Noisy Blocks'' signals retrieved from %s\n\n\n',url);
+    fprintf('\n\n\n''Blocks'' and ''Noisy Blocks'' signals retrieved from <a href="%s">%s</a>\n\n\n',url,url);
     
     dojo_medium = [raw_data_dir,'dojo_medium.txt'];
     dojo_test = [raw_data_dir,'dojo_test.txt'];
@@ -127,7 +127,7 @@ end
 %% Minnesota road network
 if ~exist([Datasets_dir,'MN_MutGauss.mat'],'file') || ~exist([Datasets_dir,'MN_MutGauss_SNR5.mat'],'file')
     url = 'https://github.com/dgleich/';
-    fprintf('\n\n\nMinnesota road network retrieved from David Gleich''s GitHub account (%s)\n\n\n',url);
+    fprintf('\n\n\nMinnesota road network retrieved from David Gleich''s GitHub account (<a href="%s">%s</a>)\n\n\n',url,url);
     
     minnesota = [raw_data_dir,'minnesota.mat'];
     if verLessThan('matlab', '8.4')
