@@ -10,16 +10,10 @@
 
 % version info
 MTSGVERSION = 001;
-fprintf('\nWelcome to the MTSG Toolbox v %g\n\n', MTSGVERSION);
 
 
-% identify the type of computer and declare MTSGPATH accordingly
-if isunix || ispc
-    MTSGPATH = [fileparts(mfilename('fullpath')),filesep];
-else
-    fprintf('\n\nI don''t recognize this computer.\nPathnames not set.\n\nSolution: edit MTSG_Path.m\n\n');
-    return
-end
+% declare MTSGPATH
+MTSGPATH = [fileparts(mfilename('fullpath')),filesep];
 
 
 % generate the path string ==> includes the folder and multiple levels of subfolders below it
@@ -35,6 +29,13 @@ else
 end
 
 addpath(mtsgp);
+
+
+% generate datasets
+Acquire_Data;
+
+% print a "success" message
+fprintf('\n\n\nMTSG Toolbox v %g was successfully installed.\n\n\n', MTSGVERSION);
 
 
 % clear variables
