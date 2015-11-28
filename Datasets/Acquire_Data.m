@@ -160,4 +160,48 @@ end
 
 
 
-clear A Datasets_dir raw_data_dir G UserWavelabPath V WLVERBOSE barbara_png dojo_medium dojo_test f infile minnesota n noise raw_data_dir tline xy ans readme url
+%% Science News matrix
+if ~exist([Datasets_dir,'ScienceNews.mat'],'file')
+    % if python is installed, get the dataset
+    try
+        url = 'https://github.com/hgfalling';
+        fprintf('\n\n\nScience News matrix retrieved from Jerrod Ankenman''s GitHub account (<a href="%s">%s</a>)\n\n\n',url,url);
+
+        SN = [raw_data_dir,'ScienceNews.npz'];
+        if verLessThan('matlab', '8.4')
+            urlwrite('https://github.com/hgfalling/pyquest/blob/master/SN_basic.npz?raw=true',SN);
+        else
+            websave(SN,'https://github.com/hgfalling/pyquest/blob/master/SN_basic.npz?raw=true');
+        end
+        
+        % load the data in Python and save it as a .mat file
+        dwp = pwd;
+        cd(raw_data_dir);
+        system('python ScienceNews_npz2mat.py');
+        cd(dwp);
+        
+        % load the .mat file saved by Python
+        load([Datasets_dir, 'ScienceNews.mat']);
+        
+        % delete articles which are duplicates (or nearly duplicates)
+        articles(112) = [];
+        articles(97)  = [];
+        articles(66)  = [];
+        articles(57)  = [];
+        articles(53)  = [];      
+        cmatrix(:,[53,57,66,97,112]) = [];
+        classes([53,57,66,97,112]) = [];
+        
+        save([Datasets_dir, 'ScienceNews.mat'],'cmatrix','articles','words','classes','class_names');
+        
+        
+    % if python is not installed
+    catch
+        fprintf('\n\nPython does not seem to be installed on this machine.\nPlease install Python if you would like to utilize the Science News dataset.\n\n');
+    end
+end
+
+
+
+
+clear A Datasets_dir raw_data_dir G UserWavelabPath V WLVERBOSE barbara_png dojo_medium dojo_test f infile minnesota n noise raw_data_dir tline xy ans readme url SN dwp cmatrix articles words
