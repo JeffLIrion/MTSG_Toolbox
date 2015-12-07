@@ -24,6 +24,25 @@ function fig = Matrix_BasisVisual(matrix,GProws,GPcols,BSrows,BScols,rowcolor,co
 
 
 
+% make sure the row and column bases are both from their respective
+% coarse-to-fine dictionary
+[~,~,c2f_rows] = ExtractData(BSrows);
+[~,~,c2f_cols] = ExtractData(BScols);
+if ~c2f_rows || ~c2f_cols
+    if ~c2f_rows && ~c2f_cols
+        fprintf('\n\nThe row and column bases are both from their respective fine-to-coarse dictionary.');
+    elseif ~c2f_rows
+        fprintf('\n\nThe row basis is from its respective fine-to-coarse dictionary.');
+    else
+        fprintf('\n\nThe column basis is from its respective fine-to-coarse dictionary.');
+    end
+    fprintf('\nMatrix_BasisVisual requires the bases to be from the coarse-to-fine dictionary.');
+    fprintf('\n\nYou can plot the bases separately using BasisVisual.m.');
+    fprintf('\nExiting now.\n\n\n');
+    fig = 0;
+    return
+end
+
 % constants
 [rows,cols] = size(matrix);
 
