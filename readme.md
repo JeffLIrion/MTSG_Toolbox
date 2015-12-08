@@ -4,7 +4,7 @@ Copyright 2015 The Regents of the University of California
 
 Implemented by Jeff Irion (Adviser: Dr. Naoki Saito)
 
--------------------------------------------------------------------------------
+
 
 ## SETUP
 
@@ -13,7 +13,7 @@ To install the Multiscale Transforms for Signals on Graphs (MTSG) Toolbox, run
 run `MTSG_Path.m` prior to loading any `GraphSig`, `GraphPart`, or `BasisSpec` 
 objects.
 
--------------------------------------------------------------------------------
+
 
 ## GETTING STARTED
 
