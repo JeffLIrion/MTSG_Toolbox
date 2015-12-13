@@ -20,7 +20,7 @@ GP = PartitionTreeFiedler(G);
 
 %% 3. Display the basis vectors
 
-Display_GHWT_Basis_Vectors_c2f(G,GP);
+GHWT_Dictionary_c2f(G,GP);
 
 
 %% 4. Count the number of choosable bases & display the partitioning tree

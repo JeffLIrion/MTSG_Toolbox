@@ -8,7 +8,7 @@ G = Gpath(6);
 GP = PartitionTreeFiedler(G);
 
 % coarse-to-fine dictionary
-Display_GHWT_Basis_Vectors_c2f(G,GP);
+GHWT_Dictionary_c2f(G,GP);
 
 % fine-to-coarse dictionary
-Display_GHWT_Basis_Vectors_f2c(G,GP);
+GHWT_Dictionary_f2c(G,GP);

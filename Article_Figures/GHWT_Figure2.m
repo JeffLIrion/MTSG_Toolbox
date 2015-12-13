@@ -6,4 +6,4 @@
 
 G6 = Gpath(6);
 GP6 = PartitionTreeFiedler(G6);
-Display_GHWT_Basis_Vectors_c2f(G6,GP6);
+GHWT_Dictionary_c2f(G6,GP6);

@@ -34,7 +34,7 @@ GP = PartitionTreeFiedler(G);
 
 %% 3. Display the basis vectors
 
-Display_HGLET_Basis_Vectors(G,GP);
+HGLET_Dictionary(G,GP);
 
 
 %% 4. Count the number of chooseable bases & display the partitioning tree
