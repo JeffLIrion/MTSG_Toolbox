@@ -1,4 +1,4 @@
-function dictionary = HGLET_Dictionary(G,GP,dmatrix)
+function dictionary = HGLET_Dictionary(G,GP,dmatrix,~,~)
 % Generate the full dictionary of HGLET basis vectors.  If the graph is 
 % small enough, generate a figure illustrating the full dictionary.  
 %
@@ -6,6 +6,10 @@ function dictionary = HGLET_Dictionary(G,GP,dmatrix)
 %   G               a GraphSig object
 %   GP              a GraphPart object
 %   dmatrix         the matrix of expansion coefficients (optional)
+%   ~               if 4 inputs are given, use the eigevectors of L_rw as
+%                   the bases  ==>  U_rw = D^(0.5) * U_sym
+%   ~               if 5 inputs are given, use the eigenvectors of L_sym as
+%                   the bases  ==>  U_sym = D^(-0.5) * U_rw
 %
 % Output
 %   dictionary      the array of all the basis vectors (if expansion 
@@ -37,7 +41,7 @@ N = N-1;
 dictionary = zeros(N,N,jmax);
 
 % determine cmax and set dmatrix to be all 1's if it is not provided
-if exist('dmatrix','var')
+if exist('dmatrix','var') && length(dmatrix) == N
     cmax = max(abs(dmatrix(:)));
 else
     cmax = 1;
@@ -54,7 +58,14 @@ end
 for j = 1:jmax
     % compute the level j basis vectors
     BS = LevelBasisSpec(GP,j-1);
-    dictionary(:,:,j) = HGLET_Synthesis(diag(dmatrix(:,j)),GP,BS,G);
+    
+    if nargin <= 3
+        dictionary(:,:,j) = HGLET_Synthesis(diag(dmatrix(:,j)),GP,BS,G);
+    elseif nargin == 4
+        dictionary(:,:,j) = HGLET_Synthesis(diag(dmatrix(:,j)),GP,BS,G,1);
+    else
+        dictionary(:,:,j) = HGLET_Synthesis(diag(dmatrix(:,j)),GP,BS,G,1,1);
+    end
     
     % display the dictionary if the graph is small enough
     if N <= cutoff

@@ -39,7 +39,7 @@ N = N-1;
 dictionary = zeros(N,N,jmax);
 
 % determine cmax and set dmatrix to be all 1's if it is not provided
-if exist('dmatrix','var')
+if exist('dmatrix','var') && length(dmatrix) == N
     cmax = max(abs(dmatrix(:)));
 else
     cmax = 1;
