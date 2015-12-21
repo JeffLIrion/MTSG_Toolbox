@@ -20,26 +20,29 @@ function fig = SparseMatrix_BasisVisual(matrix,GProws,GPcols,BSrows,BScols,rowco
 % Copyright 2015 The Regents of the University of California
 %
 % Implemented by Jeff Irion (Adviser: Dr. Naoki Saito)
+% Fri Dec 18 15:58:23 2015  modified by  Naoki Saito
 
 
 
-% make sure the row and column bases are both from their respective
-% coarse-to-fine dictionary
-[~,~,c2f_rows] = ExtractData(BSrows);
-[~,~,c2f_cols] = ExtractData(BScols);
-if ~c2f_rows || ~c2f_cols
-    if ~c2f_rows && ~c2f_cols
-        fprintf('\n\nThe row and column bases are both from their respective fine-to-coarse dictionary.');
-    elseif ~c2f_rows
-        fprintf('\n\nThe row basis is from its respective fine-to-coarse dictionary.');
-    else
-        fprintf('\n\nThe column basis is from its respective fine-to-coarse dictionary.');
+% If the row and column bases are specified, make sure that both
+% are from their respective coarse-to-fine dictionary
+if exist('BSrows','var') && isa(BSrows,'BasisSpec') && exist('BScols','var') && isa(BScols,'BasisSpec')
+    [~,~,c2f_rows] = ExtractData(BSrows);
+    [~,~,c2f_cols] = ExtractData(BScols);
+    if ~c2f_rows || ~c2f_cols
+        if ~c2f_rows && ~c2f_cols
+            fprintf('\n\nThe row and column bases are both from their respective fine-to-coarse dictionary.');
+        elseif ~c2f_rows
+            fprintf('\n\nThe row basis is from its respective fine-to-coarse dictionary.');
+        else
+            fprintf('\n\nThe column basis is from its respective fine-to-coarse dictionary.');
+        end
+        fprintf('\nSparseMatrix_BasisVisual requires the bases to be from the coarse-to-fine dictionary.');
+        fprintf('\n\nYou can plot the bases separately using BasisVisual.m.');
+        fprintf('\nExiting now.\n\n\n');
+        fig = 0;
+        return
     end
-    fprintf('\nSparseMatrix_BasisVisual requires the bases to be from the coarse-to-fine dictionary.');
-    fprintf('\n\nYou can plot the bases separately using BasisVisual.m.');
-    fprintf('\nExiting now.\n\n\n');
-    fig = 0;
-    return
 end
 
 % constants
