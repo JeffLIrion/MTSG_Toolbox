@@ -1,7 +1,12 @@
 function GP = PartitionTreeFiedlerSweep(G,~)
 % Generate a partition tree for a graph by sweeping through the entries of
 % the Fiedler vectors of either L (the unnormalized Laplacian) or L_rw (the
-% random-walk normalized Laplacian).
+% random-walk normalized Laplacian).  Whereas PartitionTreeFiedler cuts the
+% eigenvector entries based on whether they are <0 or >0, this function
+% (1) sweeps through the entries of the Fiedler vector and finds the 
+% largest difference between successive sorted eigenvector entries, (2) 
+% sets "cutoff" to be the midpoint of this interval, and (3) partitions the
+% eigenvector entries based on whether they are <cutoff or >cutoff.  
 %
 % Input
 %   G       a GraphSig object
