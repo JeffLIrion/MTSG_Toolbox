@@ -1,4 +1,4 @@
-function [dtable,G_regions] = BasisVisual(G,GP,BS,dvec)
+function [dtable,G_regions] = BasisVisual(G,GP,BS,dvec,edge_color)
 % Display an HGLET or GHWT basis
 %
 % Input
@@ -7,6 +7,8 @@ function [dtable,G_regions] = BasisVisual(G,GP,BS,dvec)
 %   BS          a BasisSpec object
 %   dvec        the expansion coefficients corresponding to the chosen
 %               basis
+%   edge_color  the color for displaying the edges that are cut for an
+%               HGLET or GHWT coarse-to-fine basis
 %
 % Output
 %   dtable      a table of the specified basis coefficients (use 'imagesc')
@@ -113,7 +115,10 @@ if BSc2f && G.dim > 0 && G.dim < 4
     % display the overlaid GraphSig object
     G_regions = EditName(G_regions,'Regions of the Specified Basis');
     G_regions = EditPlotSpecs(G_regions,sprintf(' CLim[%d,%d]',0,jmax-1),1);
-    GraphSig_Overlay(G_regions,G,1,'-','k',1,'-',[1 102/255 178/255]);
+    if ~exist('edge_color','var')
+        edge_color = [255, 102, 178]/255;
+    end
+    GraphSig_Overlay(G_regions,G,1,'-','k',1,'-',edge_color);
     
     % the colorbar tick marks
     YTC = get(colorbar,'YTick');
