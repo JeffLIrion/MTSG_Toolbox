@@ -118,7 +118,7 @@ if BSc2f && G.dim > 0 && G.dim < 4
     if ~exist('edge_color','var')
         edge_color = [255, 102, 178]/255;
     end
-    GraphSig_Overlay(G_regions,G,1,'-','k',1,'-',edge_color);
+    GraphSig_Overlay(G,G_regions,1,'-','k',1,'-',edge_color);
     
     % the colorbar tick marks
     YTC = get(colorbar,'YTick');

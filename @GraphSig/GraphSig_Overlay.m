@@ -3,14 +3,14 @@ function fig = GraphSig_Overlay(G1,G2,linewide1,ls1,lc1,linewide2,ls2,lc2)
 % G2
 %
 % Input
-%   G1          GraphSig object #1 (G1.W is a subset of G2.W)
-%   G2          GraphSig object #2
+%   G1          GraphSig object #1
+%   G2          GraphSig object #2 (G2.W is a subset of G1.W)
 %   linewide1   the width of the edges for graph #1
 %   ls1         the LineSpec for the edges of graph #1
 %   lc1         the color of the edges of graph #1
-%   linewide2   the width of the edges for graph #2
-%   ls2         the LineSpec for the edges of graph #2
-%   lc2         the color of the edges of graph #2
+%   linewide2   the width of the edges for graph #1 \setminus graph #2
+%   ls2         the LineSpec for the edges of graph #1 \setminus graph #2
+%   lc2         the color of the edges of graph #1 \setminus graph #2
 %
 % Output
 %    fig        a plot figure
@@ -38,13 +38,13 @@ if G1.dim == 1
 end
 
 % only run this for 1D signals
-[~,fcols] = size(G1.f);
+[~,fcols] = size(G2.f);
 if fcols ~= 1
     return
 end
 
 % extract the plot specifications
-[symmetric,graybar,gray255bar,copperbar,notitle,nocolorbar,~,CLim,cmin,cmax,ptsize,~,~,marker,verbatim,verbtext,sortnodes] = ExtractPlotSpecs(G1);
+[symmetric,graybar,gray255bar,copperbar,notitle,nocolorbar,~,CLim,cmin,cmax,ptsize,~,~,marker,verbatim,verbtext] = ExtractPlotSpecs(G2);
 set(0, 'DefaultFigureVisible', 'on');
 
 % specify parameters that aren't given as inputs
@@ -70,25 +70,17 @@ end
 
 %% The Plot
 
-if sortnodes
-    [~,IX] = sort(abs(G1.f),'descend');
-    G1.W = G1.W(IX,IX);
-    G1.xy = G1.xy(IX,:);
-    G1.f = G1.f(IX);
-end
-
-% plot the graph
+% plot the edges of the original graph
 fig = figure('visible','on');
-gplot3(G2.W,G2.xy,'LineStyle',ls2,'Color',lc2,'LineWidth',linewide2);
-hold on
 gplot3(G1.W,G1.xy,'LineStyle',ls1,'Color',lc1,'LineWidth',linewide1);
+hold on
 
 % determine the node sizes (if using variable sizes)
 if ~isscalar(ptsize)
     if CLim
-        ptsize = ptsize(1) + ptsize(2)*abs(G1.f)/max(abs([cmin,cmax]));
+        ptsize = ptsize(1) + ptsize(2)*abs(G2.f)/max(abs([cmin,cmax]));
     else
-        ptsize = ptsize(1) + ptsize(2)*abs(G1.f)/max(abs(G1.f));
+        ptsize = ptsize(1) + ptsize(2)*abs(G2.f)/max(abs(G2.f));
     end
 end
 
@@ -98,16 +90,19 @@ if ptsize(1) ~= 0
         if ischar(marker)
             scatter(G1.xy(:,1), G1.xy(:,2), ptsize, marker, 'filled');
         else
-            scatter(G1.xy(:,1), G1.xy(:,2), ptsize, G1.f, 'filled');
+            scatter(G1.xy(:,1), G1.xy(:,2), ptsize, G2.f, 'filled');
         end
     else
         if ischar(marker)
             scatter3(G1.xy(:,1), G1.xy(:,2), G1.xy(:,3), ptsize, marker, 'filled');
         else
-            scatter3(G1.xy(:,1), G1.xy(:,2), G1.xy(:,3), ptsize, G1.f, 'filled');
+            scatter3(G1.xy(:,1), G1.xy(:,2), G1.xy(:,3), ptsize, G2.f, 'filled');
         end
     end
 end
+
+% plot the edges that are cut
+gplot3(G1.W-G2.W,G2.xy,'LineStyle',ls2,'Color',lc2,'LineWidth',linewide2);
 
 % title?
 if ~isempty(G1.name) && ~notitle
@@ -121,7 +116,7 @@ end
 
 % symmetric?
 if symmetric
-    cmax = max(abs(G1.f));
+    cmax = max(abs(G2.f));
     if cmax < 10*eps
         cmax = 1;
     end
