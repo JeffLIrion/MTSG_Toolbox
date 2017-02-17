@@ -45,7 +45,7 @@ else
         W(W < 0.7) = 0;
     else
         % set the diagonal to zero (i.e., no loops)
-        W(1:N+1:N*N) = 10;
+        W(1:N+1:N*N) = 0;
     end
 end
 
