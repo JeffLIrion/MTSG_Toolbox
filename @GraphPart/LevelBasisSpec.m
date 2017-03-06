@@ -8,7 +8,7 @@ function BS = LevelBasisSpec(GP,j,~)
 %   ~       if a 3rd input is given, use the fine-to-coarse dictionary
 % 
 % Output
-%   BS      a BasisSpec object corresponding to the Haar basis
+%   BS      a BasisSpec object corresponding to the level j basis
 %
 %
 %
