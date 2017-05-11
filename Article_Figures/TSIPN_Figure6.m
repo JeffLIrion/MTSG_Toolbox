@@ -16,14 +16,11 @@ GP = PartitionTreeFiedler(G,1);
 
 
 % analyze the true and noisy signals
-% % % dH = HGLET_Analysis(G,GP);
-% % % dH0 = HGLET_Analysis(G0,GP);
-dH = GHWT_Analysis(G,GP);
-dH0 = GHWT_Analysis(G0,GP);
+dH = HGLET_Analysis(G,GP);
+dH0 = HGLET_Analysis(G0,GP);
 
 % find the best basis for the noisy signal
-% % % [dvec,BS,~,tau] = HGLET_GHWT_BestBasis_minrelerror(dH,0,0,0,GP,G);
-[dvec,BS,~,tau] = HGLET_GHWT_BestBasis_minrelerror(0,0,0,dH,GP,G);
+[dvec,BS,~,tau] = HGLET_GHWT_BestBasis_minrelerror(dH,0,0,0,GP,G);
 dvec0 = dmatrix2dvec(dH0,GP,BS);
 
 

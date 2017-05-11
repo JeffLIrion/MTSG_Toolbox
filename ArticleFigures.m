@@ -22,9 +22,10 @@ function ArticleFigures
 
 choice = menu('List of Reproducible Figures', 'HGLET Figure 1', ...
     'GHWT Figure 1', 'GHWT Figure 2', 'GHWT Figure 3', 'GHWT Figure 4', ...
-    'ACHA Figure 3', 'ACHA Figure 4', 'ACHA Figure 5', 'TSIPN Figure 2', ...
-    'TSIPN Figure 3', 'TSIPN Figures 4, 5, & 6', 'TSIPN Figure 7', ...
-    'TSIPN Figure 8', 'TSIPN Figure 9', 'TSIPN Table 1', 'Exit');
+    'ACHA Figure 3', 'ACHA Figure 4', 'ACHA Figure 5', ...
+    'TSIPN Figure 2', 'TSIPN Figure 3', 'TSIPN Figure 4', ...
+    'TSIPN Figure 5', 'TSIPN Figure 6', 'TSIPN Figure 7', ...
+    'TSIPN Figure 8', 'TSIPN Table 1', 'Exit');
 
 switch choice
     case 1
@@ -58,21 +59,24 @@ switch choice
         TSIPN_Figure3
         ArticleFigures
     case 11
-        TSIPN_Figure4_5_6
+        TSIPN_Figure4
         ArticleFigures
     case 12
-        TSIPN_Figure7
+        TSIPN_Figure5
         ArticleFigures
     case 13
-        TSIPN_Figure8
+        TSIPN_Figure6
         ArticleFigures
     case 14
-        TSIPN_Figure9
+        TSIPN_Figure7
         ArticleFigures
     case 15
-        TSIPN_Table1
+        TSIPN_Figure8
         ArticleFigures
     case 16
+        TSIPN_Table1
+        ArticleFigures
+    case 17
         close all
 end
 

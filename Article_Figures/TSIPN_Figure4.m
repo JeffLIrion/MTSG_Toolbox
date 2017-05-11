@@ -80,22 +80,3 @@ legend(legcell,'Location','southwest');
 xlim([0,1]);
 ylim([10^-8,1]);
 set(gcf,'color','w');
-
-
-%% Figure 5
-G = EditPlotSpecs(G,'sortnodes size5 verbatim{{axis equal;}}');
-BasisVisual(G,GP,BS3,dvec3);
-
-
-%% Figure 6
-if ~verLessThan('matlab','8.4')
-    cut_edge_color='r';
-else
-    cut_edge_color=[255, 102, 178]/255;
-end
-BasisVisual(G,GP,BS1,dvec1,cut_edge_color);
-figHandles = findobj('Type','figure');
-close(length(figHandles)-1);
-if ~verLessThan('matlab','8.4')
-    colormap('parula');
-end
