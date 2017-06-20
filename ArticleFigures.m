@@ -1,16 +1,20 @@
 function ArticleFigures
-% Generate selected figures from the following articles:
+% Generate selected figures from the following publications:
 % 
 % 1. J. Irion and N. Saito, "Hierarchical Graph Laplacian Eigen
 % Transforms," Japan SIAM Letters, vol. 6, pp. 21-24, 2014.
 %
-% 2. J. Irion and N. Saito, "The Generalized Haar-Walsh Transform," Proc. 
-% 2014 IEEE Statistical Signal Processing Workshop, pp. 488-491, 2014.
+% 2. J. Irion and N. Saito, "The Generalized Haar-Walsh Transform," Proc.
+% 2014 IEEE Workshop on Statistical Signal Processing, pp. 472-475, 2014.
 % 
 % 3. J. Irion and N. Saito, "Applied and Computational Harmonic Analysis on
 % Graphs and Networks," Wavelets and Sparsity XVI, (M. Papadakis, V. K. 
 % Goyal, D. Van De Ville, eds.), Proc. SPIE 9597, Paper #95971F, 
 % Invited paper, 2015.
+%
+% 4. J. Irion and N. Saito, "Efficient Approximation and Denoising of Graph
+% Signals Using the Multiscale Basis Dictionaries," to appear in IEEE
+% Transactions on Signal and Information Processing over Networks, 2017.
 %
 %
 %
