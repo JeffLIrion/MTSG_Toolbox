@@ -24,7 +24,7 @@ This script generates selected figures from the following articles:
 Japan SIAM Letters, vol. 6, pp. 21-24, 2014.
 
 2. J. Irion and N. Saito, *The Generalized Haar-Walsh Transform*, Proc. 2014
-IEEE Statistical Signal Processing Workshop, pp. 488-491, 2014.
+IEEE Workshop on Statistical Signal Processing, pp. 472-475, 2014.
 
 3. J. Irion and N. Saito, *Applied and Computational Harmonic Analysis on
 Graphs and Networks*, Wavelets and Sparsity XVI, (M. Papadakis, V. K. Goyal, D.
